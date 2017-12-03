@@ -1,33 +1,35 @@
-<div class="signup-container overlay">
+<div class="form-container overlay">
   <div class="row">
-    <div class="offset-md-5 offset-sm-3 col-md-14 col-sm-18 signup-form">
-      <div class="signup-text">
+    <div class="offset-md-5 offset-sm-3 col-md-14 col-sm-18 form">
+      <div class="form-text">
         <h2 class="overlay-text">Create An Account</h2>
         <p class="overlay-text">Please fill in your information and choose to be Provider or Consumer.</p>
       </div>
-      <div class="signup-inputs">
-        <div class="signup-icon"> 
+      <div class="form-inputs">
+        <div class="form-icon"> 
           <p>SIGNUP</p>
         </div>
-        <form action="">
+        <form [formGroup]="signupForm" novalidate>
           <label for="first-name">FIRST NAME</label>
-          <input type="text" name="" id="first-name">
+          <input type="text" name="" id="first-name"  placeholder="Enter First Name" formControlName="firstName">
           <label for="last-name">LAST NAME</label>
-          <input type="text" name="" id="last-name">
+          <input type="text" name="" id="last-name" placeholder="Enter Last Name" formControlName="lastName">
           <label for="email">EMAIL</label>
-          <input type="text" name="" id="enail">
+          <input type="password" name="" id="enail" placeholder="Enter Email" formControlName="email">
           <label for="password">PASSWORD</label>
-          <input type="text" name="" id="password">
+          <input type="password" name="" id="password" placeholder="Enter Password" formControlName="password">
           <label for="name">RE-TYPE PASSWORD</label>
-          <input type="text" name="" id="retype-password">
-          <p>USER TYPE</p>
-          <input type="checkbox" name="Service Provider" id="provider">
-          <label for="provider">Service Provider</label>
-          <input type="checkbox" name="Service Consumer" id="consumer">
-          <label for="consumer">Service Consumer</label>
+          <input type="text" name="" id="retype-password" placeholder="Re-Enter Password" formControlName="repeatPassword">
+          <div class="user-type">
+            <p>USER TYPE</p>
+            <input type="checkbox" name="Service Provider" id="provider">
+            <label for="provider">Service Provider</label>
+            <input type="checkbox" name="Service Consumer" id="consumer">
+            <label for="consumer">Service Consumer</label>
+          </div>
           <label for="">CAPTCHA</label>
           <input type="text" name="" id="">
-          <button type="submit"></button>
+          <button class="btn btn-primary" type="submit" value="Submit" (click)="onSubmit()">SUBMIT</button>
         </form>
         
       </div>
