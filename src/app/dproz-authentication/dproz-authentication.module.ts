@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { VerificationComponent } from './verification/verification.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
 
 @NgModule({
   imports: [
@@ -12,6 +13,6 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     RouterModule
   ],
-  declarations: [SignupComponent, LoginComponent, VerificationComponent]
+  declarations: [SignupComponent, LoginComponent, VerificationComponent, PasswordResetComponent]
 })
 export class DprozAuthenticationModule { }

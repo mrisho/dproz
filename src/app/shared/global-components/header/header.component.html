@@ -1,17 +1,28 @@
 <div class="dproz-header">
-<div class="row">
+  <div class="row">
 
-  <div class="col-md-10 dproz-logo">
-    <img src="../../../../assets/images/Vector Smart Object.png" alt="logo">
+    <div class="col-md-10 dproz-logo" >
+      <img routerLink="dproz/home" src="../../../../assets/images/Vector Smart Object.png" alt="logo dproz">
+    </div>
+    <div class="col-md-14 navigation">
+      <a routerLink="dproz/home" routerLinkActive="active-link">Home</a>
+      <a routerLink="dproz/info" routerLinkActive="active-link">About Us</a>
+      <a routerLink="dproz/services" routerLinkActive="active-link">Services</a>
+      <a routerLink="dproz/blog" routerLinkActive="active-link">Blog</a>
+      <a routerLink="dproz/contact" routerLinkActive="active-link">Contact Us</a>
+      <a *ngIf="!userData.loggedIn" class="btn btn-primary" routerLink="dproz/login">Login</a>
+      <a *ngIf="!userData.loggedIn" class="btn btn-primary" routerLink="dproz/signup" style="background: black; margin-left:10px; color:#fff">Signup</a>
+      <div class="row dropdown" *ngIf="userData.loggedIn">
+          <div class="col">
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Options</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button class="dropdown-item" routerLink="dproz/profile">Profile</button>
+                <button class="dropdown-item"  (click)="logout()">Logout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
   </div>
-  <div class="col-md-14 navigation">
-    <a routerLink="dproz/home" routerLinkActive="active-link">Home</a>
-    <a routerLink="dproz/info" routerLinkActive="active-link">About Us</a>
-    <a routerLink="dproz/services" routerLinkActive="active-link">Services</a>
-    <a routerLink="dproz/blog" routerLinkActive="active-link">Blog</a>
-    <a routerLink="dproz/contact" routerLinkActive="active-link">Contact Us</a>
-    <a class="btn btn-primary" routerLink="dproz/login">Login</a>
-    <a  class="btn btn-primary" routerLink="dproz/signup"  style="background: black; margin-left:10px; color:#fff">Signup</a>
-  </div>
-</div>
 </div>

@@ -8,13 +8,21 @@
           <div class="form-icon"> 
             <p>LOGIN</p>
           </div>
-          <form [formGroup]="loginForm" novalidate>
-            <label for="email">USERNAME</label>
-            <input type="text" name="" id="email" placeholder="Email Address" formControlName="email">
-            <label for="email">PASSWORD</label>
-            <input type="password" name="" id="password" placeholder="Email Password" formControlName="password">
-            <span style="display: none;" >Recover Password</span>
-            <button class="btn btn-primary" type="submit" (click)="onSubmit()">LOG IN</button>                
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+            <p *ngIf="errorResponse" class="error" style="text-align: center">Either emailId or password were incorrect. Please try again.</p>
+            <div>
+              <label for="email">USERNAME</label>
+              <input type="text" name="" id="email" placeholder="Email Address" formControlName="email">
+              <span *ngIf="loginForm.get('email').errors && loginForm.get('email').touched" class="error">Please enter an emailId.</span>
+            </div>
+            <div style="margin-bottom: 12px;">
+              <label for="email">PASSWORD</label>
+              <input type="password" name="" id="password" placeholder="Email Password" formControlName="password">
+              <span *ngIf="loginForm.get('password').errors && loginForm.get('password').touched" class="error">Please enter a password.</span>
+              <span style="display: none;" >Recover Password</span>
+            </div>
+            <p><a routerLink="/dproz/password">*Forgot password?</a></p>
+            <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">LOG IN</button>                
           </form>
         </div>
       </div>

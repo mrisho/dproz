@@ -9,27 +9,51 @@
         <div class="form-icon"> 
           <p>SIGNUP</p>
         </div>
-        <form [formGroup]="signupForm" novalidate>
-          <label for="first-name">FIRST NAME</label>
-          <input type="text" name="" id="first-name"  placeholder="Enter First Name" formControlName="firstName">
-          <label for="last-name">LAST NAME</label>
-          <input type="text" name="" id="last-name" placeholder="Enter Last Name" formControlName="lastName">
-          <label for="email">EMAIL</label>
-          <input type="password" name="" id="enail" placeholder="Enter Email" formControlName="email">
-          <label for="password">PASSWORD</label>
-          <input type="password" name="" id="password" placeholder="Enter Password" formControlName="password">
-          <label for="name">RE-TYPE PASSWORD</label>
-          <input type="text" name="" id="retype-password" placeholder="Re-Enter Password" formControlName="repeatPassword">
-          <div class="user-type">
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="form-element">
+            <label for="first-name">FIRST NAME</label>
+            <input type="text" name="" id="first-name"  placeholder="Enter First Name" formControlName="firstName">
+            <span *ngIf="hasError('firstName', 'required')" class="error">Please enter first name.</span>
+            <span *ngIf="hasError('firstName', 'minlength')" class="error">First Name should be at least 2 characters.</span>
+          </div>
+          <div class="form-element">
+            <label for="last-name">LAST NAME</label>
+            <input type="text" name="" id="last-name" placeholder="Enter Last Name" formControlName="lastName">
+            <span *ngIf="hasError('lastName', 'required')" class="error">Please enter last name.</span>
+            <span *ngIf="hasError('lastName', 'minlength')" class="error">Last Name should be at least 2 characters.</span>
+          </div>
+          <div class="form-element">
+            <label for="email">EMAIL</label>
+            <input type="text" name="" id="email" placeholder="Enter Email" formControlName="emailAddress">
+            <span *ngIf="hasError('emailAddress', 'required')" class="error">Please enter your email.</span>
+            <span *ngIf="hasError('emailAddress', 'invalidEmail')" class="error">Please enter a valid email.</span>
+          </div>
+          <div class="form-element">
+            <label for="password">PASSWORD</label>
+            <input type="password" name="password" id="password" placeholder="Enter Password" formControlName="password">
+            <span *ngIf="hasError('password', 'required')" class="error">Please enter a password.</span>
+            <span *ngIf="hasError('password', 'minlength')" class="error">Password should be at least 8 characters.</span>
+          </div>
+          <div class="form-element">
+            <label for="name">RE-TYPE PASSWORD</label>
+            <input type="password" name="" id="retype-password" placeholder="Re-Enter Password" formControlName="repeatPassword">
+            <span *ngIf="hasError('repeatPassword', 'required')" class="error">Please re-enter your password.</span>
+            <span *ngIf="signupForm.get('repeatPassword').getError('passMismatch')" class="error">The passwords do not match. Please retry.</span>
+          </div>
+          <div class="user-type form-element">
             <p>USER TYPE</p>
-            <input type="checkbox" name="Service Provider" id="provider">
+            <input type="checkbox" name="Service Provider" id="provider" (click)="userType($event)" [checked]="user==='provider'">
             <label for="provider">Service Provider</label>
-            <input type="checkbox" name="Service Consumer" id="consumer">
+            <input type="checkbox" name="Service Consumer" id="consumer" (click)="userType($event)" [checked]="user==='consumer'">
             <label for="consumer">Service Consumer</label>
           </div>
-          <label for="">CAPTCHA</label>
-          <input type="text" name="" id="">
-          <button class="btn btn-primary" type="submit" value="Submit" (click)="onSubmit()">SUBMIT</button>
+          <span *ngIf="hasError('userType')" class="error">Please choose service type.</span>
+          <div class="form-element">
+            <label for="">CAPTCHA</label>
+            <input type="text" name="" id="">
+            <span *ngIf="hasError('userType')" class="error">Please add captcha</span>
+          </div>
+          <button class="btn btn-primary" type="submit" value="Submit" [disabled]="signupForm.invalid">SUBMIT</button>
         </form>
         
       </div>

@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/global-components/header/header.component';
 import { AppRoute } from './app.routes';
 import { DprozModule } from './dproz/dproz.module';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthenticationService } from './shared/services/authentication.service';
+import { StateService } from './shared/services/state.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -14,13 +18,18 @@ import { DprozModule } from './dproz/dproz.module';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
+    NgbModule,
 
-    // Routing
+    // Routing  
     AppRoute,
 
     DprozModule
   ],
-  providers: [],
+  providers: [
+    AuthenticationService,
+    StateService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,6 +5,9 @@ import { HomeComponent } from './dproz-home/home/home.component';
 import { LoginComponent } from './dproz-authentication/login/login.component';
 import { VerificationComponent } from './dproz-authentication/verification/verification.component';
 import { SignupComponent } from './dproz-authentication/signup/signup.component';
+import { ProfileComponent } from './dproz-profile/profile/profile.component';
+import { PasswordResetComponent } from './dproz-authentication/password-reset/password-reset.component';
+import { LoggedInGuard } from './shared/gaurds/logged-in.guard';
 
 const routes: Routes = [
   {
@@ -20,7 +23,9 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'login', component: LoginComponent },
       { path: 'authenticate', component: VerificationComponent },
-      { path: 'signup', component: SignupComponent }
+      { path: 'signup', component: SignupComponent },
+      { path: 'profile', component: ProfileComponent, canActivate: [LoggedInGuard] },
+      { path: 'password', component: PasswordResetComponent }
     ]
   },
   {
@@ -40,7 +45,7 @@ const routes: Routes = [
     )
   ],
   exports: [ RouterModule ],
-  providers: []
+  providers: [LoggedInGuard]
 })
 
 export class AppRoute {}
