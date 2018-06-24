@@ -1,0 +1,1 @@
+export const DOMAIN = 'http://52.22.128.37:8080';
