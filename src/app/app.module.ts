@@ -6,11 +6,15 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/global-components/header/header.component';
 import { AppRoute } from './app.routes';
 import { DprozModule } from './dproz/dproz.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { StateService } from './shared/services/state.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthTokenInterceptor } from './shared/http-interceptors/auth-token-interceptor';
 
+export const httpInterceptorProviders = [
+  { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
+];
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +32,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   ],
   providers: [
     AuthenticationService,
-    StateService
+    StateService,
+    httpInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

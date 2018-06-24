@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthenticationService {
@@ -16,7 +16,7 @@ export class AuthenticationService {
   }
   
   login(credentials) {
-    return this.http.post('/api/users/login', credentials);
+    return this.http.post('/api/dproz/login', credentials);
   }
 
   forgotPassword(emailId) {
@@ -24,6 +24,9 @@ export class AuthenticationService {
     return this.http.get('/api/users/forgot-password', options);
   }
 
+  getUser(userReference) {
+    return this.http.get<any>(`/api/dproz/users/${userReference}`);
+  }
 
 
 }

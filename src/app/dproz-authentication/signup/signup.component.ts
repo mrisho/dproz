@@ -1,19 +1,35 @@
 import { Component, OnInit,  } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
+
+
+
+
+
+
+
+
+
+
+
+
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import * as isEmail from 'isemail';
+
 @Component({
   selector: 'dproz-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
+
+
 export class SignupComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private router: Router, private service: AuthenticationService) { }
 
   signupForm: FormGroup; 
   user: string;
+
 
   ngOnInit() {
     this.signupForm = this.fb.group({

@@ -12,8 +12,8 @@
             <p *ngIf="errorResponse" class="error" style="text-align: center">Either emailId or password were incorrect. Please try again.</p>
             <div>
               <label for="email">USERNAME</label>
-              <input type="text" name="" id="email" placeholder="Email Address" formControlName="email">
-              <span *ngIf="loginForm.get('email').errors && loginForm.get('email').touched" class="error">Please enter an emailId.</span>
+              <input type="text" name="" id="email" placeholder="Email Address" formControlName="username">
+              <span *ngIf="loginForm.get('username').errors && loginForm.get('username').touched" class="error">Please enter an emailId.</span>
             </div>
             <div style="margin-bottom: 12px;">
               <label for="email">PASSWORD</label>
@@ -21,8 +21,8 @@
               <span *ngIf="loginForm.get('password').errors && loginForm.get('password').touched" class="error">Please enter a password.</span>
               <span style="display: none;" >Recover Password</span>
             </div>
-            <p><a routerLink="/dproz/password">*Forgot password?</a></p>
-            <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">LOG IN</button>                
+            <p><a routerLink="/dproz/password">*Recover Password</a></p>
+            <button class="btn btn-primary" type="submit" [disabled]="loginForm.invalid">LOG IN</button>                
           </form>
         </div>
       </div>

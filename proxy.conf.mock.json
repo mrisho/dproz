@@ -1,6 +1,10 @@
 {
-    "/api": {
-      "target": "http://localhost:3000",
-      "secure": false
-    }
+  "/api/": {
+    "target": "http://52.22.128.37:8080",
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/login": "/login"
+    },
+    "changeOrigin": true
   }
+}
