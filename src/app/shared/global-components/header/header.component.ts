@@ -23,8 +23,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.state.next({loggedIn: false});
+    this.state.resetState();
     this.router.navigate(['../dproz/home']);
   }
-
 }

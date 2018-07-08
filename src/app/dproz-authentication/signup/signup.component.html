@@ -42,17 +42,13 @@
           </div>
           <div class="user-type form-element">
             <p>USER TYPE</p>
-            <input type="checkbox" name="Service Provider" id="provider" (click)="userType($event)" [checked]="user==='provider'">
-            <label for="provider">Service Provider</label>
+            <input type="checkbox" name="Service Provider" id="PRO" (click)="userType($event)" [checked]="user==='PRO'">
+            <label for="PRO">Service Provider</label>
             <input type="checkbox" name="Service Consumer" id="consumer" (click)="userType($event)" [checked]="user==='consumer'">
             <label for="consumer">Service Consumer</label>
           </div>
           <span *ngIf="hasError('userType')" class="error">Please choose service type.</span>
-          <div class="form-element">
-            <label for="">CAPTCHA</label>
-            <input type="text" name="" id="">
-            <span *ngIf="hasError('userType')" class="error">Please add captcha</span>
-          </div>
+          <re-captcha [formControlName]="'recaptcha'" (resolved)="resolved($event)" siteKey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></re-captcha>
           <button class="btn btn-primary" type="submit" value="Submit" [disabled]="signupForm.invalid">SUBMIT</button>
         </form>
         

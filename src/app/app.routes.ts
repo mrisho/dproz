@@ -22,6 +22,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'login', component: LoginComponent },
+      { path: 'authenticate/:code', component: VerificationComponent },
       { path: 'authenticate', component: VerificationComponent },
       { path: 'signup', component: SignupComponent },
       { path: 'profile', component: ProfileComponent, canActivate: [LoggedInGuard] },

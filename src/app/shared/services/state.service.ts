@@ -11,7 +11,7 @@ export class StateService {
     authToken: undefined,
     userReferenceId: undefined,
     identity: {
-      
+      emailId: undefined
     }
   }
 
@@ -32,9 +32,17 @@ export class StateService {
 
   setIdentity(identity) {
     let currentValue = this.user.value;
-    currentValue.identity = identity;
-    this.user.next(currentValue);
-    console.log(this.user.value);
-    
+    currentValue.identity = {...currentValue.identity, ...identity};
+    this.next(currentValue);    
+  }
+  
+  setReferenceId(referenceId) {
+    let currentValue = this.user.value;
+    currentValue.userReferenceId = referenceId;
+    this.next(currentValue);    
+  }
+
+  resetState() {
+    this.next(this.intialState);
   }
 }

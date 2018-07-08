@@ -12,6 +12,7 @@ import { StateService } from './shared/services/state.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthTokenInterceptor } from './shared/http-interceptors/auth-token-interceptor';
 
+
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
 ];
@@ -24,10 +25,8 @@ export const httpInterceptorProviders = [
     BrowserModule,
     HttpClientModule,
     NgbModule,
-
     // Routing  
     AppRoute,
-
     DprozModule
   ],
   providers: [

@@ -1,3 +1,5 @@
+import {Buffer} from 'buffer';
+
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
@@ -13,6 +15,9 @@
  *
  * Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
  */
+// (window as any).global = window;
+
+(window as any).Buffer = Buffer;
 
 /***************************************************************************************************
  * BROWSER POLYFILLS
@@ -34,6 +39,7 @@
 // import 'core-js/es6/weak-map';
 // import 'core-js/es6/set';
 
+
 /** IE10 and IE11 requires the following for NgClass support on SVG elements */
 // import 'classlist.js';  // Run `npm install --save classlist.js`.
 
@@ -45,13 +51,13 @@
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
 import 'core-js/es7/reflect';
 
-
 /**
  * Required to support Web Animations `@angular/platform-browser/animations`.
  * Needed for: All but Chrome, Firefox and Opera. http://caniuse.com/#feat=web-animation
  **/
 // import 'web-animations-js';  // Run `npm install --save web-animations-js`.
-
+// eslint-disable-line
+// global.Buffer = global.Buffer || require("buffer").Buffer; 
 
 
 /***************************************************************************************************
@@ -74,3 +80,4 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  * Need to import at least one locale-data with intl.
  */
 // import 'intl/locale-data/jsonp/en';
+
