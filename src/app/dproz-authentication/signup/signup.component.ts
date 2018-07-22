@@ -5,6 +5,7 @@ import { AuthenticationService } from '../../shared/services/authentication.serv
 import { StateService } from '../../shared/services/state.service';
 
 import * as isEmail from 'isemail';
+import { PlacesService } from '../../shared/services/places.service';
 
 @Component({
   selector: 'dproz-signup',
@@ -14,21 +15,32 @@ import * as isEmail from 'isemail';
 
 export class SignupComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private router: Router, private service: AuthenticationService, private state: StateService) { }
+  constructor(private fb: FormBuilder,
+    private router: Router,
+    private service: AuthenticationService,
+    private state: StateService,
+    private placesService: PlacesService) { }
 
   signupForm: FormGroup; 
-  user: string;
+  user = '';
+  states = [];
+  cities = [];
+  counties = [];
+  streets = [];
+  selectedState = '';
+  selectedCity = '';
+  selectedCounty = '';
 
   ngOnInit() {
     this.signupForm = this.fb.group({
-      userType: ['', Validators.required],
-      firstName: ['', [Validators.required, Validators.minLength(2)]], 
-      lastName: ['',[ Validators.required, Validators.minLength(2)]], 
+      userType: ['USER', Validators.required],
+      firstName: ['Var', [Validators.required, Validators.minLength(2)]], 
+      lastName: ['Shar',[ Validators.required, Validators.minLength(2)]], 
       middleName: '',
-      emailAddress: ['', Validators.required], 
-      password: ['',[ Validators.required, Validators.minLength(8)]], 
-      repeatPassword: ['', Validators.required], 
-      profilePictureUrl: '',
+      emailAddress: ['vsharma226@gmail.com', Validators.required], 
+      password: ['Dproz@123',[ Validators.required, Validators.minLength(8)]], 
+      repeatPassword: ['Dproz@123', Validators.required], 
+      // profilePictureUrl: null,
       lastChangedPasswordOn: null,
       verificationDate: null,
       verified: true,
@@ -39,29 +51,38 @@ export class SignupComponent implements OnInit {
         contactMethod: 'CALL'
       }),
       address: this.fb.group({
-        longitude: 0,
-        latitude: 0,
-        street: '',
-        district: '',
-        region: '',
-        country: ''
-      }),
+        longitude: [0,[ this.requiredValidator.bind(this)]],
+        latitude: [0, this.requiredValidator.bind(this)],
+        street: ['', this.requiredValidator.bind(this)],
+        district: ['', this.requiredValidator.bind(this)],
+        county: ['', this.requiredValidator.bind(this)],
+        region: ['', this.requiredValidator.bind(this)],
+        country: ['', this.requiredValidator.bind(this)],
+        postcode: ['', this.requiredValidator.bind(this)],
+        timezone: ['', this.requiredValidator.bind(this)]
+      })
+    });
+
+    this.placesService.getRegions().subscribe(regions => {
+      this.states = regions;
+      console.log(this.states);
+      
     })
   }
-
+  
   onSubmit() {
     if(this.signupForm.get('password').value  !== this.signupForm.get('repeatPassword').value) {
       this.signupForm.get('repeatPassword').setErrors({passMismatch: "password"})
     }
     if(!isEmail.validate(this.signupForm.get('emailAddress').value))
-      this.signupForm.get('emailAddress').setErrors({invalidEmail: 'error'}) 
-
+    this.signupForm.get('emailAddress').setErrors({invalidEmail: 'error'}) 
+    
     if (this.signupForm.valid) {
       let form = this.signupForm.getRawValue();
       this.service.signup(form).subscribe(({userReferenceId}) => {
         window.sessionStorage.setItem('encoded', window.btoa(this.signupForm.get('emailAddress').value));
         this.state.setReferenceId(userReferenceId);
-        this.state.setIdentity({emailId: form.emailAddress})
+        this.state.setIdentity({emailAddress: form.emailAddress})
         this.router.navigate(['../dproz/authenticate']);
       }, error => {
         window.sessionStorage.setItem('encoded', window.btoa(this.signupForm.get('emailAddress').value));
@@ -71,28 +92,69 @@ export class SignupComponent implements OnInit {
       
     }
   }
-
+  
   resolved(captchaResponse: string) {
     console.log(`Resolved captcha with response ${captchaResponse}:`);
   }
-
+  
+  addressChange(e) {
+    if(e.target.id === 'state') {
+      this.selectedState = e.target.value;
+      this.placesService.getCities(this.selectedState).subscribe(cities => {
+        this.cities = cities;
+      })
+    } else if (e.target.id === 'city') {
+      this.selectedCity = e.target.value
+      this.placesService.getCounties(this.selectedState, this.selectedCity).subscribe(counties => {
+        this.selectedCounty = e.target.value;
+        this.counties = counties;
+      })
+    } else if (e.target.id === 'county') {
+      this.selectedCounty = e.target.value;
+      this.placesService.getStreets(this.selectedState, this.selectedCity, this.selectedCounty).subscribe(streets => {
+        this.streets = streets;
+      })
+    } else if (e.target.id === 'street') {
+      let addressSelected: any = this.streets.find(el => el._street===e.target.value && el._county===this.selectedCounty);
+      
+      this.signupForm.patchValue({
+        address: {
+          longitude: addressSelected._longitude,
+          latitude: addressSelected._latitude,
+          street: addressSelected._street,
+          district: addressSelected._region,
+          county: addressSelected._county,
+          postcode: addressSelected._postcode,
+          region: addressSelected._region,
+          country: addressSelected._country,
+          timezone: addressSelected._timezone
+        }
+      });
+      console.log(this.signupForm.get('address'));
+    }
+  }
+  
   userType(e) {
     
     this.user = e.target.id;
-    let status = e.target.checked;
-    if (status)
-      this.signupForm.get('userType').setValue(this.user);
+    let {checked} = e.target;
+    if (checked)
+    this.signupForm.get('userType').setValue(this.user);
     else 
-      this.signupForm.get('userType').setValue('');
+    this.signupForm.get('userType').setValue('');
   }
-
+  
   userTypeError() {
     this.signupForm.get('userType').errors
   }
-
+  
   hasError(input, type?: string) {
     return (type ? this.signupForm.get(input).getError(type) : this.signupForm.get(input).errors)
-            && this.signupForm.get(input).touched;
+    && this.signupForm.get(input).touched;
   }
-
+  
+    requiredValidator(c) {
+      return (this.user !== 'USER' && !c.value) ? {required: true} : null; 
+    }
+  
 }

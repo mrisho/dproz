@@ -32,11 +32,11 @@ export class VerificationComponent implements OnInit {
           this.errorMessage = `There was an error while verifing you account. Please try again.`
           console.log(error, 'Error while verification');
         })
-      } else if (this.state.getState().userReferenceId && this.state.getState().identity.emailId) {
+      } else if (this.state.getState().userReferenceId && this.state.getState().identity.emailAddress) {
         this.pageIntent = `Verify Account`
         this.activeForm = 'verificationForm';
         this.token = this.state.getState().userReferenceId;
-        this.email = this.state.getState().identity.emailId;
+        this.email = this.state.getState().identity.emailAddress;
       } else {
         this.pageIntent = `Resend Token`
         this.activeForm = 'resendTokenForm';

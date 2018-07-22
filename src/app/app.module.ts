@@ -9,8 +9,11 @@ import { DprozModule } from './dproz/dproz.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { StateService } from './shared/services/state.service';
+import { PlacesService } from './shared/services/places.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthTokenInterceptor } from './shared/http-interceptors/auth-token-interceptor';
+import { DprozContactUsComponent } from './dproz-contact-us/dproz-contact-us.component';
+import { DprozAboutUsComponent } from './dproz-about-us/dproz-about-us.component';
 
 
 export const httpInterceptorProviders = [
@@ -19,7 +22,9 @@ export const httpInterceptorProviders = [
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    DprozContactUsComponent,
+    DprozAboutUsComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +37,7 @@ export const httpInterceptorProviders = [
   providers: [
     AuthenticationService,
     StateService,
+    PlacesService,
     httpInterceptorProviders
   ],
   bootstrap: [AppComponent]

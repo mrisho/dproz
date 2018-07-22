@@ -13,7 +13,10 @@ import { Auth } from '../../shared/interfaces/auth';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
-  errorResponse: Response;
+  forgotPasswordForm: FormGroup;
+  loginErrorResponse: Response;
+  fpErrorResponse: Response;
+  activeForm = 'loginForm';
 
   constructor(private fb: FormBuilder, 
               private router: Router, 
@@ -25,11 +28,19 @@ export class LoginComponent implements OnInit {
       username: ['vsharma226@gmail.com', Validators.required],
       password: ['Dproz@123', Validators.required],      
     })
+
+    this.forgotPasswordForm = this.fb.group({
+      emailAddress: ['vsharma226@gmail.com', Validators.required],
+    })
   }
 
-  onSubmit() {
+  toggleForm() {
+    this.activeForm = this.activeForm==='loginForm' ? 'forgotPasswordForm' : 'loginForm';
+  }
+  
+  onLoginSubmit() {
     this.service.login(this.loginForm.getRawValue()).subscribe(({ Authorization, userReferenceId } : Auth) => {
-      this.errorResponse = null;
+      this.loginErrorResponse = null;
       this.state.next({loggedIn: true, authToken: Authorization, userReferenceId});
       this.service.getUser(this.state.getState().userReferenceId).subscribe(data => {
         this.state.setIdentity(data);
@@ -37,7 +48,15 @@ export class LoginComponent implements OnInit {
       });
 
     }, (error) => {
-      this.errorResponse = error;
+      this.loginErrorResponse = error;
+    })
+  }
+
+  onForgotPasswordSubmit() {
+    this.service.forgotPassword(this.forgotPasswordForm.getRawValue()).subscribe(() => {
+
+    }, error => {
+      this.fpErrorResponse = error;
     })
   }
 

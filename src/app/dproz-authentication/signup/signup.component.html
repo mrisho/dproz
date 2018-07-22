@@ -44,10 +44,29 @@
             <p>USER TYPE</p>
             <input type="checkbox" name="Service Provider" id="PRO" (click)="userType($event)" [checked]="user==='PRO'">
             <label for="PRO">Service Provider</label>
-            <input type="checkbox" name="Service Consumer" id="consumer" (click)="userType($event)" [checked]="user==='consumer'">
-            <label for="consumer">Service Consumer</label>
+            <input type="checkbox" name="Service Consumer" id="USER" (click)="userType($event)" [checked]="user==='USER'">
+            <label for="USER">Service Consumer</label>
           </div>
           <span *ngIf="hasError('userType')" class="error">Please choose service type.</span>
+          <div *ngIf="signupForm.get('userType').value==='PRO'" class="form-element">
+            <select id="state" (change)="addressChange($event)">
+              <option [value]=null style="display: none">Select State</option>
+              <option *ngFor="let state of states" [value]="state._region">{{state._region}}</option>
+            </select>
+            <select id="city" (change)="addressChange($event)">
+              <option [value]=null style="display: none">Select City</option>
+              <option *ngFor="let city of cities" [value]="city._city">{{city._city}}</option>
+            </select>
+            <select id="county" (change)="addressChange($event)">
+              <option [value]=null style="display: none">Select County</option>
+              <option *ngFor="let county of counties" [value]="county._county">{{county._county}}</option>
+            </select>
+            <select id="street" (change)="addressChange($event)">
+              <option [value]=null style="display: none">Select Street</option>
+              <option *ngFor="let street of streets" [value]="street._street">{{street._street}}</option>
+            </select>
+            <!-- <span *ngIf="signupForm.get('repeatPassword').getError('passMismatch')" class="error">The passwords do not match. Please retry.</span> -->
+          </div>
           <re-captcha [formControlName]="'recaptcha'" (resolved)="resolved($event)" siteKey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></re-captcha>
           <button class="btn btn-primary" type="submit" value="Submit" [disabled]="signupForm.invalid">SUBMIT</button>
         </form>
