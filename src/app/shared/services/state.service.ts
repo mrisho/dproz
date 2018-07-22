@@ -23,7 +23,7 @@ export class StateService {
   }
 
   getAuthToken() {
-    return this.user.value.authToken;
+    return window.localStorage.getItem('auth-session');
   }
 
   getState() {

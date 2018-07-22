@@ -43,7 +43,8 @@ export class PasswordResetComponent implements OnInit {
     this.route.params.subscribe(data => {
       if (data.code && !this.isLoggedIn) {
         let a = 'eyJhbGciOiJIUzUxMiIsInppcCI6IkRFRiJ9.eNo0jMEOgjAQRP9lz4RsS2laTl698gcLXZQohbRWjMZ_d010LpNM3rwX5DJAB_d8prSQ1vZwWmi-1uO6QAVUwsxxZCFKvMR1jzKOienGATrVNlp5J2WdrWDOWbhdUoctrc-fo2ROPU9fzVFOgEjeGtOixWCc1wO6RhkV_DQgORPkwo_tb_fYNu8PAAAA__8.4n83875p9g0xa--8v80ztPwJZK0jEOQwDHa3UAB462v2FblfZoIuN0NcfOL1531hP6nCXiRtvH2pnpqlH60DCA';
-        this.service.verifyEmail(data.code).subscribe(({userReferenceId}) => {
+        this.service.verifyEmail(data.code).subscribe(({Authorization, userReferenceId}) => {
+          window.localStorage.setItem('auth-token', Authorization);
           this.changePasswordForm.get('userReferenceId').setValue(userReferenceId);
           this.activeForm = 'forgotPasswordForm';
 
@@ -89,6 +90,7 @@ export class PasswordResetComponent implements OnInit {
       //   delete formData.oldPassword;
       // }
       this.service.changePassword(formData).subscribe(() => {
+        window.localStorage.removeItem('auth-token');
         this.router.navigate(['../dproz/login']);
       }, (error: HttpErrorResponse) => {
         console.log(error.status);

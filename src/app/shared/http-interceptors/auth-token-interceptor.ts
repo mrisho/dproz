@@ -14,7 +14,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    const authToken = this.auth.getAuthToken();
+    const authToken = window.localStorage.getItem('auth-token');
     console.log(authToken, req, '**************************************');
     
 
