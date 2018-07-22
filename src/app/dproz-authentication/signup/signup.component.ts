@@ -33,7 +33,7 @@ export class SignupComponent implements OnInit {
 
   ngOnInit() {
     this.signupForm = this.fb.group({
-      userType: ['USER', Validators.required],
+      userType: ['', Validators.required],
       firstName: ['Var', [Validators.required, Validators.minLength(2)]], 
       lastName: ['Shar',[ Validators.required, Validators.minLength(2)]], 
       middleName: '',
@@ -54,7 +54,7 @@ export class SignupComponent implements OnInit {
         longitude: [0,[ this.requiredValidator.bind(this)]],
         latitude: [0, this.requiredValidator.bind(this)],
         street: ['', this.requiredValidator.bind(this)],
-        district: ['', this.requiredValidator.bind(this)],
+        city: ['', this.requiredValidator.bind(this)],
         county: ['', this.requiredValidator.bind(this)],
         region: ['', this.requiredValidator.bind(this)],
         country: ['', this.requiredValidator.bind(this)],
@@ -67,7 +67,9 @@ export class SignupComponent implements OnInit {
       this.states = regions;
       console.log(this.states);
       
-    })
+    });
+
+    this.userChange();
   }
   
   onSubmit() {
@@ -75,10 +77,13 @@ export class SignupComponent implements OnInit {
       this.signupForm.get('repeatPassword').setErrors({passMismatch: "password"})
     }
     if(!isEmail.validate(this.signupForm.get('emailAddress').value))
-    this.signupForm.get('emailAddress').setErrors({invalidEmail: 'error'}) 
+    this.signupForm.get('emailAddress').setErrors({invalidEmail: 'error'});
     
     if (this.signupForm.valid) {
       let form = this.signupForm.getRawValue();
+      if (form.userType === 'USER') {
+        delete form.address;
+      }
       this.service.signup(form).subscribe(({userReferenceId}) => {
         window.sessionStorage.setItem('encoded', window.btoa(this.signupForm.get('emailAddress').value));
         this.state.setReferenceId(userReferenceId);
@@ -97,19 +102,32 @@ export class SignupComponent implements OnInit {
     console.log(`Resolved captcha with response ${captchaResponse}:`);
   }
   
+  userChange() {
+    this.signupForm.get('userType').valueChanges.subscribe(v => {
+      Object.keys((this.signupForm.get('address') as FormGroup).controls).forEach(element => {
+        this.signupForm.get('address').get(element).updateValueAndValidity();
+      });
+    })
+  }
+
   addressChange(e) {
     if(e.target.id === 'state') {
       this.selectedState = e.target.value;
+      this.signupForm.get('address').get('region').setValue(null);
+      this.signupForm.get('address').get('county').setValue(null);
+      this.signupForm.get('address').get('street').setValue(null);
       this.placesService.getCities(this.selectedState).subscribe(cities => {
         this.cities = cities;
       })
     } else if (e.target.id === 'city') {
+      this.signupForm.get('address').get('county').setValue(null);
+      this.signupForm.get('address').get('street').setValue(null);
       this.selectedCity = e.target.value
       this.placesService.getCounties(this.selectedState, this.selectedCity).subscribe(counties => {
-        this.selectedCounty = e.target.value;
         this.counties = counties;
       })
     } else if (e.target.id === 'county') {
+      this.signupForm.get('address').get('street').setValue(null);
       this.selectedCounty = e.target.value;
       this.placesService.getStreets(this.selectedState, this.selectedCity, this.selectedCounty).subscribe(streets => {
         this.streets = streets;
@@ -122,7 +140,7 @@ export class SignupComponent implements OnInit {
           longitude: addressSelected._longitude,
           latitude: addressSelected._latitude,
           street: addressSelected._street,
-          district: addressSelected._region,
+          city: addressSelected._city,
           county: addressSelected._county,
           postcode: addressSelected._postcode,
           region: addressSelected._region,
@@ -154,7 +172,7 @@ export class SignupComponent implements OnInit {
   }
   
     requiredValidator(c) {
-      return (this.user !== 'USER' && !c.value) ? {required: true} : null; 
+      return (this.user === 'PRO' && !c.value) ? {required: true} : null; 
     }
   
 }

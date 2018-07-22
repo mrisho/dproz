@@ -24,6 +24,8 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.state.resetState();
+    window.localStorage.removeItem('auth-session');
+    window.localStorage.removeItem('user-reference');
     this.router.navigate(['../dproz/home']);
   }
 }

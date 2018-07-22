@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
   
   onLoginSubmit() {
     this.service.login(this.loginForm.getRawValue()).subscribe(({ Authorization, userReferenceId } : Auth) => {
+      window.localStorage.setItem('auth-token', Authorization);
+      window.localStorage.setItem('user-reference', userReferenceId);
       this.loginErrorResponse = null;
       this.state.next({loggedIn: true, authToken: Authorization, userReferenceId});
       this.service.getUser(this.state.getState().userReferenceId).subscribe(data => {

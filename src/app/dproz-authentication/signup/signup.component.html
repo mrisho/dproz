@@ -51,19 +51,19 @@
           <div *ngIf="signupForm.get('userType').value==='PRO'" class="form-element">
             <select id="state" (change)="addressChange($event)">
               <option [value]=null style="display: none">Select State</option>
-              <option *ngFor="let state of states" [value]="state._region">{{state._region}}</option>
+              <option *ngFor="let state of states" [value]="state._region" [selected]="signupForm.getRawValue().address.region===state._region">{{state._region}}</option>
             </select>
             <select id="city" (change)="addressChange($event)">
               <option [value]=null style="display: none">Select City</option>
-              <option *ngFor="let city of cities" [value]="city._city">{{city._city}}</option>
+              <option *ngFor="let city of cities" [value]="city._city" [selected]="signupForm.getRawValue().address.city===city._city">{{city._city}}</option>
             </select>
             <select id="county" (change)="addressChange($event)">
               <option [value]=null style="display: none">Select County</option>
-              <option *ngFor="let county of counties" [value]="county._county">{{county._county}}</option>
+              <option *ngFor="let county of counties" [value]="county._county" [selected]="signupForm.getRawValue().address.county===county._county">{{county._county}}</option>
             </select>
             <select id="street" (change)="addressChange($event)">
               <option [value]=null style="display: none">Select Street</option>
-              <option *ngFor="let street of streets" [value]="street._street">{{street._street}}</option>
+              <option *ngFor="let street of streets" [value]="street._street" [selected]="signupForm.getRawValue().address.street===street._street">{{street._street}}</option>
             </select>
             <!-- <span *ngIf="signupForm.get('repeatPassword').getError('passMismatch')" class="error">The passwords do not match. Please retry.</span> -->
           </div>

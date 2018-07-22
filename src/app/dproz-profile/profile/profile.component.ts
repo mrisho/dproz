@@ -13,7 +13,7 @@ export class ProfileComponent implements OnInit {
   constructor(private state: StateService) { }
 
   ngOnInit() {
-    this.state.user.subscribe(user => this.user = user)
+    this.user = this.state.getState();
   }
 
 }
