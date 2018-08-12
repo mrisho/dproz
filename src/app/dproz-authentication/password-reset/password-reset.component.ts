@@ -91,6 +91,7 @@ export class PasswordResetComponent implements OnInit {
       // }
       this.service.changePassword(formData).subscribe(() => {
         window.localStorage.removeItem('auth-token');
+        window.localStorage.removeItem('user-reference');
         this.router.navigate(['../dproz/login']);
       }, (error: HttpErrorResponse) => {
         console.log(error.status);

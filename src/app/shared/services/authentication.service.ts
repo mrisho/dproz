@@ -23,7 +23,7 @@ export class AuthenticationService {
     const options = { params: new HttpParams().set('emailAddress', emailId) };
     return this.http.get<void>(`${SERVICING_DOMAIN}/api/dproz/users/verification/resend`, options);
   }
-  
+
   login(credentials) {
     return this.http.post(`${SERVICING_DOMAIN}/api/dproz/login`, credentials);
   }
@@ -41,8 +41,24 @@ export class AuthenticationService {
   }
 
   getUser(userReference) {
-    console.log(`${SERVICING_DOMAIN}/api/dproz/users/${userReference}`, 'test');
     return this.http.get<any>(`${SERVICING_DOMAIN}/api/dproz/users/${userReference}`);
+  }
+
+  postThumbnail(file, attachmentParentReferenceId, attachmentCategory, attachmentDescription, thumbnail) {
+    const options = {
+      params: new HttpParams()
+        .set('attachmentParentReferenceId', attachmentParentReferenceId)
+        .set('attachmentCategory', attachmentCategory)
+        .set('attachmentDescription', attachmentDescription)
+        .set('thumbnail', thumbnail)
+    };
+    console.log(options)
+
+    return this.http.post<any>(`${SERVICING_DOMAIN}/api/dproz/attachments/`, file, options);
+  }
+
+  getThumbnai(image, userReference) {
+    return this.http.get<any>(`${SERVICING_DOMAIN}/api/dproz/attachments/${userReference}`);
   }
 
 }

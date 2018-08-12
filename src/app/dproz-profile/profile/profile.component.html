@@ -1,11 +1,205 @@
+<div class="user_us_style">
+  <div class="container">
+    <div class="row contact_row_style py-3 pt-3">
+      <div class="col-lg ">
+        <br>
+        <p>HomePage &nbsp;&nbsp; /&nbsp;&nbsp;
+          <span>User Profile</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
-<h2>Profile Settings</h2>
-<ul>
-  <li>{{ user.identity.firstName }}</li>
-  <li>{{ user.identity.lastName }}</li>
-  <li>{{ user.identity.userReferenceId }}</li>
-</ul>
+<div *ngIf="user.identity" class="pricing-header  py-3 pt-md-5 pb-md-4 profile_home">
+  <div class="container px-5">
+    <div class="row">
+      <div class="col-lg-10 col-sm-24 col-xs-24 user_row_style ">
+        <div class="profile_home_col_5">
+          <img src="../../../assets/images/prfilimg1.png">
+          <h4 class="text-uppercase pt-3">{{ user.identity.firstName }} {{ user.identity.lastName }}</h4>
+          <p class="profile_home_p">Lorem Ipsum is simply dummy text</p>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+            standard dummy text ever since the 1500s, when an unknown printer took a galley</p>
+          <div>
+            <a href="#">
+              <img src="../../../assets/images/User-Profile_Dproz_03.png">
+            </a>
+            <a href="#">
+              <img src="../../../assets/images/User-Profile_Dproz_05.png">
+            </a>
+            <a href="#">
+              <img src="../../../assets/images/User-Profile_Dproz_07.png">
+            </a>
+            <a href="#">
+              <img src="../../../assets/images/User-Profile_Dproz_09.png">
+            </a>
 
-<div>
-  <a routerLink="/dproz/password">Change Password</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-14 col-sm-24 col-xs-24 user_row_style">
+        <div class="info_input_border">
+
+          <div class="row user_row_style">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+              <div class="p-2">
+                <h4>General Information</h4>
+              </div>
+              <div class="general_bt_br"></div>
+            </div>
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+              <div class="pt-2 pb-md-4 btn_styletop">
+                <ul class="info_form">
+                  <li *ngIf="editForm" (click)="toggleEdit()">
+                    <a>
+                      <i class="fa fa-save"></i>Cancel</a>
+                  </li>
+                  <li *ngIf="editForm" (click)="saveForm()">
+                    <a>
+                      <i class="fa fa-save"></i> Save Change</a>
+                  </li>
+                  <li *ngIf="!editForm" (click)="toggleEdit()">
+                    <a>
+                      <i class="fa fa-pencil"></i> Edit Profile</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile_home_bt_br"></div>
+          <div class="pt-4 form_style">
+            <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
+
+              <div class="form-group row info_input">
+                <label for="inputEmail3" class="col-sm-8 col-xs-8 col-form-label">
+                  <i class="fa fa-user"></i>{{ editForm ? 'First' : 'User' }} Name </label>
+                <div class="col-sm-16 col-xs-16">
+                  <div class="form-group">
+                    <div class="text-effect" [ngClass]="user.identity.firstName ? 'focus-t' : ''" style="height:35px">
+                      <div *ngIf="editForm">
+                        <span style="padding: 5px 20px; "></span>
+                        <input type="text" class="form-control focus-text w-75" formControlName="firstName">
+                      </div>
+                      <div *ngIf="!editForm" style="margin: 5px 21px">
+                        {{ user.identity.firstName }} {{ user.identity.lastName }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="editForm" class="form-group row info_input">
+                <label for="inputEmail3" class="col-sm-8 col-xs-8 col-form-label">
+                  <i class="fa fa-user"></i>Last Name </label>
+                <div class="col-sm-16 col-xs-16">
+                  <div class="form-group">
+                    <div class="text-effect" style="height:35px">
+                      <span style="padding: 5px 20px; "></span>
+                      <input type="text" class="form-control focus-text w-75" formControlName="lastName">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row info_input">
+                <label for="inputEmail3" class="col-sm-8 col-form-label">
+                  <i class="fa fa-user"></i>User Type </label>
+                <div class="col-sm-8 ">
+                  <div *ngIf="editForm">
+                    <input type="checkbox" value="" class="checkbox-inline" (click)="userType($event)" [checked]="user.identity.userType==='PRO'">Service provider
+                    <input type="checkbox" value="" class="checkbox-inline" (click)="userType($event)" [checked]="user.identity.userType==='USER'">Service Coustmer
+                  </div>
+                  <div *ngIf="!editForm" style="margin: 5px 21px">{{ user.identity.userType }}</div>
+                </div>
+              </div>
+
+              <div class="form-group row info_input">
+                <label for="inputEmail3" class="col-sm-8 col-form-label">
+                  <i class="fa fa-envelope"></i>Email Address </label>
+                <div class="col-sm-16 ">
+                  <div class="form-group">
+                    <div class="text-effect" style="height:35px">
+                      <div *ngIf="editForm">
+                        <span style="padding: 5px 20px; "></span>
+                        <input type="text" class="form-control focus-text w-75" formControlName="emailAddress">
+                      </div>
+                      <div *ngIf="!editForm" style="margin: 5px 21px">{{ user.identity.emailAddress }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row info_input">
+                <label for="inputEmail3" class="col-sm-8 col-form-label">
+                  <i class="fa fa-map-marker"></i>Address </label>
+                <div class="col-sm-16">
+                  <div class="form-group">
+                    <div class="text-effect" style="height:100%; display: block;">
+                      <ng-container *ngIf="editForm">
+                        <select id="state" (change)="addressChange($event)" class="address-select">
+                          <option [value]=null style="display: none">Select State</option>
+                          <option *ngFor="let state of states" [value]="state._region" [selected]="profileForm.getRawValue().address.region===state._region">{{state._region}}</option>
+                        </select>
+                        <select id="city" (change)="addressChange($event)" class="address-select">
+                          <option [value]=null style="display: none">Select City</option>
+                          <option *ngFor="let city of cities" [value]="city._city" [selected]="profileForm.getRawValue().address.city===city._city">{{city._city}}</option>
+                        </select>
+                        <select id="county" (change)="addressChange($event)" class="address-select">
+                          <option [value]=null style="display: none">Select County</option>
+                          <option *ngFor="let county of counties" [value]="county._county" [selected]="profileForm.getRawValue().address.county===county._county">{{county._county}}</option>
+                        </select>
+                        <select id="street" (change)="addressChange($event)" class="address-select">
+                          <option [value]=null style="display: none">Select Street</option>
+                          <option *ngFor="let street of streets" [value]="street._street" [selected]="profileForm.getRawValue().address.street===street._street">{{street._street}}</option>
+                        </select>
+                      </ng-container>
+                      <div *ngIf="!editForm" style="margin: 5px 21px">{{ user.identity.address.street }} {{ user.identity.address.city }} {{ user.identity.address.county }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row info_input">
+                <label for="inputEmail3" class="col-sm-8 col-form-label">
+                  <i class="fa fa-phone"></i>Phone </label>
+                <div class="col-sm-16">
+                  <div class="form-group">
+                    <div class="text-effect" formGroupName="phone">
+                      <ng-container *ngIf="editForm">
+                        <input type="text" class="form-control focus-text w-75" formControlName="phoneNumber">
+                      </ng-container>
+                      <div *ngIf="!editForm" style="margin: 5px 21px">{{ user.identity.phone?.phoneNumber }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row info_input">
+                <label for="inputEmail3" class="col-sm-8 col-form-label">
+                  <i class="fa fa-phone"></i>Profile Picture</label>
+                <div class="col-sm-16">
+                  <div class="form-group">
+                    <div class="text-effect" style="height:35px">
+                      <div *ngIf="editForm">
+                        <span style="padding: 5px 20px; "></span>
+                        <input type="file" id="avatar" (change)="onFileChange($event)">
+                      </div>
+                      <div *ngIf="!editForm" style="margin: 5px 21px">{{ user.identity?.profilePictureUrl?.url }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row info_input">
+                <a style="padding: 5px 35px;" routerLink="../password" routerLinkActive="active-link">Change Password</a>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

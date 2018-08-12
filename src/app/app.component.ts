@@ -17,9 +17,12 @@ export class AppComponent implements OnInit {
       this.state.next({ loggedIn: true, authToken: window.localStorage.getItem('auth-token'), userReferenceId:  window.localStorage.getItem('user-reference') });
       this.service.getUser(this.state.getState().userReferenceId).subscribe(data => {
         this.state.setIdentity(data);
-        this.router.navigate(['../dproz/home']);
+        // this.router.navigate(['../dproz/home']);
       }, error => {
         console.log(error);
+        this.state.resetState();
+        window.localStorage.removeItem('auth-token');
+        window.localStorage.removeItem('user-reference');
         this.router.navigate(['../dproz/login']);
       });
     }

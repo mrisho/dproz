@@ -1,0 +1,44 @@
+.contact_us_style {
+  background-image: url(../../assets/images/top-contect-us.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-top: 4px solid #03a9f4;
+  border-bottom: 4px solid #03a9f4;
+}
+
+.contact_row_style h3 {
+  font-size: 28px;
+  color: #fff;
+  font-family: Myriad Pro;
+  -webkit-font-family: Myriad Pro;
+  font-weight: 90;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.border_top {
+  padding: 2px;
+  padding-bottom: 3px;
+  background-color: #fff;
+  width: 6%;
+  border: none !important;
+  margin-bottom: 10px;
+}
+
+.contact_row_style p {
+  font-size: 14px;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.contect_colum1_style .button_style {
+  background: #03a9f4;
+  color: #fff;
+  margin-top: 26px;
+  padding-left: 50px;
+  padding-right: 50px;
+  text-transform: uppercase;
+  border-radius: 1px;
+  text-decoration: none;
+}

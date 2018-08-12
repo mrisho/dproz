@@ -1,4 +1,4 @@
-import { Component, OnInit,  } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../shared/services/authentication.service';
@@ -21,7 +21,7 @@ export class SignupComponent implements OnInit {
     private state: StateService,
     private placesService: PlacesService) { }
 
-  signupForm: FormGroup; 
+  signupForm: FormGroup;
   user = '';
   states = [];
   cities = [];
@@ -34,24 +34,24 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
     this.signupForm = this.fb.group({
       userType: ['', Validators.required],
-      firstName: ['Var', [Validators.required, Validators.minLength(2)]], 
-      lastName: ['Shar',[ Validators.required, Validators.minLength(2)]], 
+      firstName: ['Var', [Validators.required, Validators.minLength(2)]],
+      lastName: ['Shar', [Validators.required, Validators.minLength(2)]],
       middleName: '',
-      emailAddress: ['vsharma226@gmail.com', Validators.required], 
-      password: ['Dproz@123',[ Validators.required, Validators.minLength(8)]], 
-      repeatPassword: ['Dproz@123', Validators.required], 
+      emailAddress: ['vsharma226@gmail.com', Validators.required],
+      password: ['Dproz@123', [Validators.required, Validators.minLength(8)]],
+      repeatPassword: ['Dproz@123', Validators.required],
       // profilePictureUrl: null,
       lastChangedPasswordOn: null,
       verificationDate: null,
       verified: true,
-      recaptcha:[null, Validators.required],
+      recaptcha: [null, Validators.required],
       phone: this.fb.group({
         phoneNumber: '1111222211',
         primary: true,
         contactMethod: 'CALL'
       }),
       address: this.fb.group({
-        longitude: [0,[ this.requiredValidator.bind(this)]],
+        longitude: [0, [this.requiredValidator.bind(this)]],
         latitude: [0, this.requiredValidator.bind(this)],
         street: ['', this.requiredValidator.bind(this)],
         city: ['', this.requiredValidator.bind(this)],
@@ -66,42 +66,42 @@ export class SignupComponent implements OnInit {
     this.placesService.getRegions().subscribe(regions => {
       this.states = regions;
       console.log(this.states);
-      
+
     });
 
     this.userChange();
   }
-  
+
   onSubmit() {
-    if(this.signupForm.get('password').value  !== this.signupForm.get('repeatPassword').value) {
-      this.signupForm.get('repeatPassword').setErrors({passMismatch: "password"})
+    if (this.signupForm.get('password').value !== this.signupForm.get('repeatPassword').value) {
+      this.signupForm.get('repeatPassword').setErrors({ passMismatch: "password" })
     }
-    if(!isEmail.validate(this.signupForm.get('emailAddress').value))
-    this.signupForm.get('emailAddress').setErrors({invalidEmail: 'error'});
-    
+    if (!isEmail.validate(this.signupForm.get('emailAddress').value))
+      this.signupForm.get('emailAddress').setErrors({ invalidEmail: 'error' });
+
     if (this.signupForm.valid) {
       let form = this.signupForm.getRawValue();
-      if (form.userType === 'USER') {
-        delete form.address;
-      }
-      this.service.signup(form).subscribe(({userReferenceId}) => {
+      // if (form.userType === 'USER') {
+      //   delete form.address;
+      // }
+      this.service.signup(form).subscribe(({ userReferenceId }) => {
         window.sessionStorage.setItem('encoded', window.btoa(this.signupForm.get('emailAddress').value));
         this.state.setReferenceId(userReferenceId);
-        this.state.setIdentity({emailAddress: form.emailAddress})
+        this.state.setIdentity({ emailAddress: form.emailAddress })
         this.router.navigate(['../dproz/authenticate']);
       }, error => {
         window.sessionStorage.setItem('encoded', window.btoa(this.signupForm.get('emailAddress').value));
         // this.router.navigate(['../dproz/authenticate']);
         console.log(error, `Error!!!!`)
       });
-      
+
     }
   }
-  
+
   resolved(captchaResponse: string) {
     console.log(`Resolved captcha with response ${captchaResponse}:`);
   }
-  
+
   userChange() {
     this.signupForm.get('userType').valueChanges.subscribe(v => {
       Object.keys((this.signupForm.get('address') as FormGroup).controls).forEach(element => {
@@ -111,7 +111,7 @@ export class SignupComponent implements OnInit {
   }
 
   addressChange(e) {
-    if(e.target.id === 'state') {
+    if (e.target.id === 'state') {
       this.selectedState = e.target.value;
       this.signupForm.get('address').get('region').setValue(null);
       this.signupForm.get('address').get('county').setValue(null);
@@ -133,8 +133,8 @@ export class SignupComponent implements OnInit {
         this.streets = streets;
       })
     } else if (e.target.id === 'street') {
-      let addressSelected: any = this.streets.find(el => el._street===e.target.value && el._county===this.selectedCounty);
-      
+      let addressSelected: any = this.streets.find(el => el._street === e.target.value && el._county === this.selectedCounty);
+
       this.signupForm.patchValue({
         address: {
           longitude: addressSelected._longitude,
@@ -151,28 +151,28 @@ export class SignupComponent implements OnInit {
       console.log(this.signupForm.get('address'));
     }
   }
-  
+
   userType(e) {
-    
+
     this.user = e.target.id;
-    let {checked} = e.target;
+    let { checked } = e.target;
     if (checked)
-    this.signupForm.get('userType').setValue(this.user);
-    else 
-    this.signupForm.get('userType').setValue('');
+      this.signupForm.get('userType').setValue(this.user);
+    else
+      this.signupForm.get('userType').setValue('');
   }
-  
+
   userTypeError() {
     this.signupForm.get('userType').errors
   }
-  
+
   hasError(input, type?: string) {
     return (type ? this.signupForm.get(input).getError(type) : this.signupForm.get(input).errors)
-    && this.signupForm.get(input).touched;
+      && this.signupForm.get(input).touched;
   }
-  
-    requiredValidator(c) {
-      return (this.user === 'PRO' && !c.value) ? {required: true} : null; 
-    }
-  
+
+  requiredValidator(c) {
+    return (this.user === 'PRO' && !c.value) ? { required: true } : null;
+  }
+
 }

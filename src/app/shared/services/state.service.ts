@@ -11,7 +11,8 @@ export class StateService {
     authToken: undefined,
     userReferenceId: undefined,
     identity: {
-      emailAddress: undefined
+      emailAddress: undefined,
+      address: undefined
     }
   }
 

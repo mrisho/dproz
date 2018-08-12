@@ -1,0 +1,40 @@
+.about_us_style {
+  background-image: url(../../assets/images//top-about-img.png  );
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-top: 4px solid #03a9f4;
+  border-bottom: 4px solid #03a9f4;
+}
+
+.border_bott {
+  border: 1px solid #03a9f4;
+  padding: 2px;
+  width: 50px;
+  background: #03a9f4;
+}
+
+.border_top {
+  padding: 2px;
+  padding-bottom: 3px;
+  background-color: #fff;
+  width: 6%;
+  border: none !important;
+  margin-bottom: 10px;
+}
+
+.contact_row_style h3 {
+  font-size: 28px;
+  color: #fff;
+  font-family: Myriad Pro;
+  -webkit-font-family: Myriad Pro;
+  font-weight: 90;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.contact_row_style p {
+  font-size: 14px;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
