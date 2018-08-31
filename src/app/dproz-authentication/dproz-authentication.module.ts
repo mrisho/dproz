@@ -21,7 +21,7 @@ import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
   providers: [
     {
       provide: RECAPTCHA_SETTINGS,
-      useValue: { siteKey: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" } as RecaptchaSettings,
+      useValue: { siteKey: "6Lejo2kUAAAAAKpLBaJ4NtKM6tuv8wgIB9Wr0big" } as RecaptchaSettings,
     }
   ]
 })

@@ -14,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthTokenInterceptor } from './shared/http-interceptors/auth-token-interceptor';
 import { DprozContactUsComponent } from './dproz-contact-us/dproz-contact-us.component';
 import { DprozAboutUsComponent } from './dproz-about-us/dproz-about-us.component';
+import { DocumentService } from './shared/services/document.service';
 
 
 export const httpInterceptorProviders = [
@@ -38,6 +39,7 @@ export const httpInterceptorProviders = [
     AuthenticationService,
     StateService,
     PlacesService,
+    DocumentService,
     httpInterceptorProviders
   ],
   bootstrap: [AppComponent]

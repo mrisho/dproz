@@ -5,6 +5,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { PlacesService } from '../../shared/services/places.service';
 import * as isEmail from 'isemail';
 import { UserService } from '../../shared/services/user.service';
+import { DocumentService } from '../../shared/services/document.service';
 
 @Component({
   selector: 'dproz-profile',
@@ -29,7 +30,9 @@ export class ProfileComponent implements OnInit {
     private state: StateService,
     private service: AuthenticationService,
     private placesService: PlacesService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private docService: DocumentService
+  ) { }
   @ViewChild('myname') input;
 
   ngOnInit() {
@@ -49,6 +52,7 @@ export class ProfileComponent implements OnInit {
         longitude: [0, [this.requiredValidator.bind(this)]],
         latitude: [0, this.requiredValidator.bind(this)],
         street: ['', this.requiredValidator.bind(this)],
+        city: ['', this.requiredValidator.bind(this)],
         county: ['', this.requiredValidator.bind(this)],
         region: ['', this.requiredValidator.bind(this)],
         country: ['', this.requiredValidator.bind(this)],
@@ -81,7 +85,10 @@ export class ProfileComponent implements OnInit {
   onFileChange(event) {
     if (event.target.files.length > 0) {
       let file = event.target.files[0];
-      this.service.postThumbnail(file, this.user.identity.userReferenceId, 'PHOTO_ID', null, 'true');
+      this.docService.postDocument(file, this.user.identity.userReferenceId, 'PHOTO_ID', 'thumbnail', 'true').subscribe(d => {
+        console.log(d);
+        
+      });
     }
   }
 
@@ -103,20 +110,30 @@ export class ProfileComponent implements OnInit {
 
     if (this.editForm) {
       this.profileForm.get('address').patchValue(this.state.getState().identity.address);
-      console.log(this.profileForm.getRawValue())
-      if (this.profileForm.get('address').value.region) {
-        this.placesService.getCities(this.profileForm.get('address').value.region).subscribe(cities => {
+      console.log(this.profileForm.getRawValue());
+      const {region, county, city} = this.profileForm.getRawValue().address;
+      this.selectedCity = city;
+      this.selectedCounty = county;
+      this.selectedState = region;
+      if (this.profileForm.get('address').value.city) {
+        this.placesService.getCities(region).subscribe(cities => {
           this.cities = cities;          
           console.log(this.state.getState().identity.address.region);
-          if (this.state.getState().identity.address.county) {
-            this.placesService.getCounties(this.profileForm.get('address').value.region, this.profileForm.get('address').value.city).subscribe(counties => {
+          if (this.profileForm.get('address').value.county) {
+            this.placesService.getCounties(region, city).subscribe(counties => {
               this.counties = counties;
-            })
-          }
-        })
-      }
+              if (this.profileForm.get('address').value.street) {
+                this.placesService.getStreets(region, city, county).subscribe(streets => {
+                  this.streets = streets;
+                  
+                })
+              }
+          })
+        }
+      })
     }
   }
+}
 
   saveForm() {
     this.onSubmit();

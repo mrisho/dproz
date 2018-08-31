@@ -44,22 +44,5 @@ export class AuthenticationService {
     return this.http.get<any>(`${SERVICING_DOMAIN}/api/dproz/users/${userReference}`);
   }
 
-  postThumbnail(file, attachmentParentReferenceId, attachmentCategory, attachmentDescription, thumbnail) {
-    const options = {
-      params: new HttpParams()
-        .set('attachmentParentReferenceId', attachmentParentReferenceId)
-        .set('attachmentCategory', attachmentCategory)
-        .set('attachmentDescription', attachmentDescription)
-        .set('thumbnail', thumbnail)
-    };
-    console.log(options)
-
-    return this.http.post<any>(`${SERVICING_DOMAIN}/api/dproz/attachments/`, file, options);
-  }
-
-  getThumbnai(image, userReference) {
-    return this.http.get<any>(`${SERVICING_DOMAIN}/api/dproz/attachments/${userReference}`);
-  }
-
 }
 
