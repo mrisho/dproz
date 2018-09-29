@@ -15,7 +15,13 @@ import { AuthTokenInterceptor } from './shared/http-interceptors/auth-token-inte
 import { DprozContactUsComponent } from './dproz-contact-us/dproz-contact-us.component';
 import { DprozAboutUsComponent } from './dproz-about-us/dproz-about-us.component';
 import { DocumentService } from './shared/services/document.service';
-
+import { ServicesComponent, EditServiceComponent } from './services/services.component';
+import { MatCardModule, MatTabsModule, MatStepperModule, MatListModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatTreeModule, MatIconModule, MatProgressBarModule } from '@angular/material';
+import { BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ServiceModule } from './service/service.module';
+import { BasicInfoComponent } from './services/basic-info/basic-info.component';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
@@ -25,7 +31,9 @@ export const httpInterceptorProviders = [
     AppComponent,
     HeaderComponent,
     DprozContactUsComponent,
-    DprozAboutUsComponent
+    DprozAboutUsComponent,
+    ServicesComponent, EditServiceComponent, BasicInfoComponent,
+   
   ],
   imports: [
     BrowserModule,
@@ -33,8 +41,10 @@ export const httpInterceptorProviders = [
     NgbModule,
     // Routing  
     AppRoute,
-    DprozModule
+    DprozModule, FormsModule,ReactiveFormsModule, MatFormFieldModule, MatStepperModule,MatInputModule, MatTreeModule, MatIconModule,MatProgressBarModule,
+    MatCardModule, MatTabsModule, BrowserAnimationsModule, MatListModule, MatDialogModule, ServiceModule,
   ],
+  entryComponents: [EditServiceComponent,],
   providers: [
     AuthenticationService,
     StateService,
@@ -45,3 +55,5 @@ export const httpInterceptorProviders = [
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

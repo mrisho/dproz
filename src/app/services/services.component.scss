@@ -1,0 +1,17 @@
+.example-card {
+     max-width: 1000px;
+     min-width:400px;
+   //  max-height: 800px;
+  //   overflow: hidden;
+  }
+
+//   @media (max-width: 600px) {
+//     md-card {
+//       min-width:17rem;
+//     }
+//   }
+  
+  .example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+  }
