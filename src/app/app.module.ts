@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ServiceModule } from './service/service.module';
 import { BasicInfoComponent } from './services/basic-info/basic-info.component';
+import { DprozProfProfileComponent } from './dproz-prof-profile/dproz-prof-profile.component';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
@@ -32,7 +33,7 @@ export const httpInterceptorProviders = [
     HeaderComponent,
     DprozContactUsComponent,
     DprozAboutUsComponent,
-    ServicesComponent, EditServiceComponent, BasicInfoComponent,
+    ServicesComponent, EditServiceComponent, BasicInfoComponent, DprozProfProfileComponent,
    
   ],
   imports: [

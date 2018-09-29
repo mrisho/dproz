@@ -46,7 +46,9 @@ export class EditServiceComponent {
 
   constructor(
     public dialogRef: MatDialogRef<EditServiceComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+      console.log(localStorage);
+     }
 
   onNoClick(): void {
     this.dialogRef.close();

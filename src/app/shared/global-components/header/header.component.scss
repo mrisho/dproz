@@ -1,7 +1,10 @@
 .dproz-header {
-  padding: 12px;
-  //removing horizontal scroll
-  overflow: hidden;
+   padding: 12px;
+  //removing horizontal scroll and show dropdown menu
+
+    width: 90%;
+    margin: 0px auto;
+  
   .dropdown {
     margin-left: 0px;
 
