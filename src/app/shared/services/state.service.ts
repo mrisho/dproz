@@ -34,7 +34,12 @@ export class StateService {
   setIdentity(identity) {
     let currentValue = this.user.value;
     currentValue.identity = {...currentValue.identity, ...identity};
+   
     this.next(currentValue);    
+  }
+
+  getCurrentUser(){
+    return localStorage.getItem("user_details");
   }
   
   setReferenceId(referenceId) {

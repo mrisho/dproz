@@ -9,7 +9,7 @@ import { UserService } from '../shared/services/user.service';
 import { DocumentService } from '../shared/services/document.service';
 
 @Component({
-  selector: 'dproz-dproz-prof-profile',
+  selector: 'dproz-prof-profile',
   templateUrl: './dproz-prof-profile.component.html',
   styleUrls: ['./dproz-prof-profile.component.scss']
 })

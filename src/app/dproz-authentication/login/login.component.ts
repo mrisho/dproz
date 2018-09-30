@@ -45,6 +45,9 @@ export class LoginComponent implements OnInit {
       this.loginErrorResponse = null;
       this.state.next({loggedIn: true, authToken: Authorization, userReferenceId});
       this.service.getUser(this.state.getState().userReferenceId).subscribe(data => {
+        console.log("user get data");
+        console.log(data);
+        localStorage.setItem("user_details", JSON.stringify(data));
         this.state.setIdentity(data);
         this.router.navigate(['../dproz/home']);
       });
