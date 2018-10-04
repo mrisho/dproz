@@ -16,13 +16,14 @@ import { DprozContactUsComponent } from './dproz-contact-us/dproz-contact-us.com
 import { DprozAboutUsComponent } from './dproz-about-us/dproz-about-us.component';
 import { DocumentService } from './shared/services/document.service';
 import { ServicesComponent, EditServiceComponent } from './services/services.component';
-import { MatCardModule, MatTabsModule, MatStepperModule, MatListModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatTreeModule, MatIconModule, MatProgressBarModule, MatCheckboxModule, MatButtonModule, MatIconRegistry } from '@angular/material';
+import { MatMenuModule, MatCardModule, MatTabsModule, MatStepperModule, MatListModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatTreeModule, MatIconModule, MatProgressBarModule, MatCheckboxModule, MatButtonModule, MatIconRegistry } from '@angular/material';
 import { BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ServiceModule } from './service/service.module';
 import { BasicInfoComponent } from './services/basic-info/basic-info.component';
 import { DprozProfProfileComponent } from './dproz-prof-profile/dproz-prof-profile.component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
@@ -41,10 +42,10 @@ export const httpInterceptorProviders = [
     HttpClientModule,
     NgbModule,
     // Routing  
-    AppRoute,
+    AppRoute, AngularFontAwesomeModule,
     DprozModule, FormsModule,ReactiveFormsModule, MatFormFieldModule, MatStepperModule,MatInputModule, MatTreeModule, MatIconModule,MatProgressBarModule,
     MatCardModule, MatTabsModule, BrowserAnimationsModule, MatListModule, MatDialogModule, 
-    ServiceModule, MatCheckboxModule, MatButtonModule, MatIconModule
+    ServiceModule, MatCheckboxModule, MatButtonModule, MatIconModule, MatMenuModule
   ],
   entryComponents: [EditServiceComponent,],
   providers: [

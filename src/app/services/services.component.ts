@@ -5,6 +5,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {BehaviorSubject} from 'rxjs';
+import { ServicesService } from '../shared/services/services.service';
 
 export class TodoItemNode {
   children: TodoItemNode[];
@@ -22,10 +23,10 @@ export class TodoItemFlatNode {
  * The Json object for to-do list data.
  */
 const TREE_DATA = {
-  "Construction": [
-    "Tall Buildings",
-     "Residential Houses",
-       "Offices"]
+  "Construction": {
+       2: "Tall Buildings",
+     3 :"Residential Houses",
+      5:  "Offices"}
   ,
    "Trades Middle Man": [
     'Cook dinner',
@@ -126,7 +127,13 @@ export class ServicesComponent implements OnInit {
   user_ref:string;
   user;
 
-  constructor(public dialog: MatDialog, private state: StateService) { }
+  constructor(public dialog: MatDialog, private services: ServicesService) {
+    
+    services.getServiceCategories().subscribe( x => {
+      console.log(x);
+    });
+    
+   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(EditServiceComponent, {
@@ -137,6 +144,7 @@ export class ServicesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      console.log(result);
       this.animal = result;
     });
 
@@ -251,7 +259,7 @@ saveNode(node: TodoItemFlatNode, itemValue: string) {
  
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(this.checklistSelection);
   }
 
 }
