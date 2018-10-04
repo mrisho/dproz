@@ -6,6 +6,8 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {BehaviorSubject} from 'rxjs';
+import { JsonPipe } from '@angular/common';
+import { stringify } from '@angular/compiler/src/util';
 
 export class TodoItemNode {
   children: TodoItemNode[];
@@ -67,23 +69,25 @@ export class ChecklistDatabase {
 
   initialize() {
     this.services.getServices().subscribe( x => {
+ 
+      let y = JSON.parse(JSON.stringify(x));
 
-      let cats: Category[] = [];
-
-       for( let i = 0; i < x.length; i++)
+       for( let i = 0; i< y.length; i++)
        {
-          if(TREE_DATA[x[i].category.categoryName] == undefined)
+         let k = y[i];
+        
+          if(TREE_DATA[k.category.categoryName] == undefined)
           {
-            TREE_DATA[x[i].category.categoryName]  = [x[i].serviceDescription];
+            TREE_DATA[k.category.categoryName]  = [k.serviceDescription];
 
           } else
           {
-            TREE_DATA[x[i].category.categoryName][x[i].serviceDescription]  = null;
+            TREE_DATA[k.category.categoryName][k.serviceDescription]  = null;
           } 
       
        }
 
-       console.log(TREE_DATA);
+      //  console.log(TREE_DATA);
        const data = this.buildFileTree(TREE_DATA, 0);
 
     // Notify the change.
