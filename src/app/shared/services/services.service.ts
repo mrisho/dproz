@@ -14,9 +14,9 @@ export class ServicesService {
     return this.http.get(`${SERVICING_DOMAIN}/api/dproz/services/categories`);
   }
 
-  getServicesByCategory(category_id)
+  getServices()
   {
-    return this.http.get(`${SERVICING_DOMAIN}/api/dproz/services/categories`);
+    return this.http.get(`${SERVICING_DOMAIN}/api/dproz/services`);
   }
 
 }

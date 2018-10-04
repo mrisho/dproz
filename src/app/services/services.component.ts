@@ -1,3 +1,4 @@
+import { ServicesService } from './../shared/services/services.service';
 import { StateService } from './../../../../../dproz-ui/src/app/shared/services/state.service';
 import { Inject, Component, OnInit, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -5,7 +6,6 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {BehaviorSubject} from 'rxjs';
-import { ServicesService } from '../shared/services/services.service';
 
 export class TodoItemNode {
   children: TodoItemNode[];
@@ -19,21 +19,36 @@ export class TodoItemFlatNode {
   expandable: boolean;
 }
 
+
+export class Category {
+  name: string;
+  services : IndividualService[];
+}
+
+export class IndividualService {
+  name: string;
+  id: string;
+}
 /**
  * The Json object for to-do list data.
  */
-const TREE_DATA = {
-  "Construction": {
-       2: "Tall Buildings",
-     3 :"Residential Houses",
-      5:  "Offices"}
-  ,
-   "Trades Middle Man": [
-    'Cook dinner',
-    'Read the Material Design spec',
-    'Upgrade Application to Angular'
-  ]
-};
+let TREE_DATA = {};
+
+// let TREE_DATA = {
+//   "Construction": {
+//        2: "Tall Buildings",
+//      3 :"Residential Houses",
+//       5:  "Offices"}
+//   ,
+//    "Trades Middle Man": [
+//     'Cook dinner',
+//     'Read the Material Design spec',
+//     'Upgrade Application to Angular'
+//   ]
+// };
+
+
+
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -46,17 +61,38 @@ export class ChecklistDatabase {
 
   get data(): TodoItemNode[] { return this.dataChange.value; }
 
-  constructor() {
+  constructor(private services:ServicesService) {
     this.initialize();
   }
 
   initialize() {
-    // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
-    //     file node as children.
-    const data = this.buildFileTree(TREE_DATA, 0);
+    this.services.getServices().subscribe( x => {
+
+      let cats: Category[] = [];
+
+       for( let i = 0; i < x.length; i++)
+       {
+          if(TREE_DATA[x[i].category.categoryName] == undefined)
+          {
+            TREE_DATA[x[i].category.categoryName]  = [x[i].serviceDescription];
+
+          } else
+          {
+            TREE_DATA[x[i].category.categoryName][x[i].serviceDescription]  = null;
+          } 
+      
+       }
+
+       console.log(TREE_DATA);
+       const data = this.buildFileTree(TREE_DATA, 0);
 
     // Notify the change.
     this.dataChange.next(data);
+      //console.log(x);
+    });
+    // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
+    //     file node as children.
+   
   }
 
   /**
@@ -118,7 +154,7 @@ export class ServicesComponent implements OnInit {
   //  throw new Error("Method not implemented.");
   this.user_ref  = localStorage.getItem("user-reference");
   this.user = JSON.parse(localStorage.getItem("user_details"));
-  console.log(TREE_DATA["Construction"]);
+  console.log(TREE_DATA);
 //  this.user
   }
 
@@ -129,9 +165,6 @@ export class ServicesComponent implements OnInit {
 
   constructor(public dialog: MatDialog, private services: ServicesService) {
     
-    services.getServiceCategories().subscribe( x => {
-      console.log(x);
-    });
     
    }
 
