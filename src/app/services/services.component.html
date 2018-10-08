@@ -24,96 +24,42 @@
             </mat-card-content>
          </mat-tab>
       <mat-tab label="Services">   <mat-card-content>
-        <div style="float:right; clear: both;">
+          <div style="float:left; margin: 10px 20px; color: 	#50B2EC;">
+              Click the (+) Sign to Add Services
+              </div>
+        <div style="float:right;">
           <button mat-icon-button (click)="openDialog()">
             <mat-icon>add</mat-icon></button>
           </div>
+   <div style="clear: both;">
+     <mat-accordion>
+       <div *ngFor="let category of categoryArray" >
+          <mat-expansion-panel (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+      <mat-panel-title>
+      {{category.name}}
+      </mat-panel-title>
+      <mat-panel-description>
+       <!-- {{panelOpenState ? 'open' : 'closed'}} -->
+      </mat-panel-description>
+      </mat-expansion-panel-header><ul style="list-style-type:square">
+      <div *ngFor="let service of category.services" style="clear:both; padding: 0px 0px 10px;">
+        <li>
+          <div style="float:left;">{{service.name}}</div><div style="float:right;"><button mat-icon-button (click)="openDialog()"> 
+            <mat-icon>delete</mat-icon></button></div></li>
+      </div></ul>
+      </mat-expansion-panel>
+       </div>
    
-         <div>
-            <mat-card-subtitle style="font-size: 17px">Chakula</mat-card-subtitle>
-    <mat-card-subtitle>Wali</mat-card-subtitle><div style="float:right; clear: both;"><button mat-icon-button (click)="openDialog()"> 
-        <mat-icon>delete</mat-icon></button></div>
-           <p>
-              The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-              A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-              bred for hunting.
-           </p>
-           <mat-card-subtitle>Ugali</mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="openDialog()"> <mat-icon>delete</mat-icon></button></div>
-            <p>
-               The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-               A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-               bred for hunting.
-            </p>
-         </div><hr/>
-       
-          <div>
-          <mat-card-subtitle style="font-size: 17px">Biashara ya pili</mat-card-subtitle>
-          <mat-card-subtitle>
-              Mboga
-            </mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="openDialog()"> <mat-icon>delete</mat-icon></button></div>
-              <p>
-                 The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                 A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                 bred for hunting.
-              </p>
-            </div><hr/>
-            <div>
-            <mat-card-subtitle style="font-size: 17px">biashara ya tatu</mat-card-subtitle>
-            <mat-card-subtitle>
-              Madawa
-            </mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="openDialog()"> <mat-icon>delete</mat-icon></button></div>
-                <p>
-                   The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                   A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                   bred for hunting.
-                </p>
-              </div><hr/>
+</mat-accordion>
+   </div>
+      
         </mat-card-content> </mat-tab>
       <mat-tab label="Experience">    <mat-card-content>
-          <div style="float:right; clear: both;">
-            <button mat-icon-button (click)="openDialog()">
-              <mat-icon>add</mat-icon></button>
-            </div>
-     
-           <div>
-              <mat-card-subtitle style="font-size: 17px">Chakula</mat-card-subtitle>
-      <mat-card-subtitle>Wali</mat-card-subtitle><div style="float:right; clear: both;"><button mat-icon-button (click)="openDialog()"> 
-          <mat-icon>edit</mat-icon></button></div>
-             <p>
-                The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                bred for hunting.
-             </p>
-             <mat-card-subtitle>Ugali</mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="openDialog()"> <mat-icon>edit</mat-icon></button></div>
-              <p>
-                 The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                 A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                 bred for hunting.
-              </p>
-           </div><hr/>
-         
-            <div>
-            <mat-card-subtitle style="font-size: 17px">Biashara ya pili</mat-card-subtitle>
-            <mat-card-subtitle>
-                Mboga
-              </mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="openDialog()"> <mat-icon>edit</mat-icon></button></div>
-                <p>
-                   The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                   A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                   bred for hunting.
-                </p>
-              </div><hr/>
-              <div>
-              <mat-card-subtitle style="font-size: 17px">biashara ya tatu</mat-card-subtitle>
-              <mat-card-subtitle>
-                Madawa
-              </mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="openDialog()"> <mat-icon>edit</mat-icon></button></div>
-                  <p>
-                     The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                     A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                     bred for hunting.
-                  </p>
-                </div><hr/>
+          <dproz-experience>
+
+          </dproz-experience>
           </mat-card-content> </mat-tab>
     </mat-tab-group>
     <!-- <button >View All</button> -->

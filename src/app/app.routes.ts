@@ -11,6 +11,7 @@ import { LoggedInGuard } from './shared/gaurds/logged-in.guard';
 import { DprozContactUsComponent } from './dproz-contact-us/dproz-contact-us.component';
 import { DprozAboutUsComponent } from './dproz-about-us/dproz-about-us.component';
 import { ServicesComponent } from './services/services.component';
+import { DprozExperienceComponent } from './services/dproz-experience/dproz-experience.component';
 
 const routes: Routes = [
   {
@@ -33,7 +34,8 @@ const routes: Routes = [
       { path: 'services', component: ServicesComponent },
       { path: 'profile', component: ProfileComponent, canActivate: [LoggedInGuard] },
       { path: 'password/:code', component: PasswordResetComponent },
-      { path: 'password', component: PasswordResetComponent }
+      { path: 'password', component: PasswordResetComponent },
+      { path: 'experience', component: DprozExperienceComponent }
     ]
   },
   {

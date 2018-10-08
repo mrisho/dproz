@@ -6,17 +6,18 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {BehaviorSubject} from 'rxjs';
-import { JsonPipe } from '@angular/common';
-import { stringify } from '@angular/compiler/src/util';
 
-export class TodoItemNode {
-  children: TodoItemNode[];
+
+export class ServiceItemNode {
+  children: ServiceItemNode[];
   item: string;
+  value: string;
 }
 
 /** Flat to-do item node with expandable and level information */
-export class TodoItemFlatNode {
+export class ServiceItemFlatNode {
   item: string;
+  value: string;
   level: number;
   expandable: boolean;
 }
@@ -24,7 +25,14 @@ export class TodoItemFlatNode {
 
 export class Category {
   name: string;
-  services : IndividualService[];
+  equals(name:string):boolean{
+
+   if(this.name = name)
+   return true;
+
+   return false;
+  }
+  services : IndividualService[] = [];
 }
 
 export class IndividualService {
@@ -36,84 +44,50 @@ export class IndividualService {
  */
 let TREE_DATA = {};
 
-// let TREE_DATA = {
-//   "Construction": {
-//        2: "Tall Buildings",
-//      3 :"Residential Houses",
-//       5:  "Offices"}
-//   ,
-//    "Trades Middle Man": [
-//     'Cook dinner',
-//     'Read the Material Design spec',
-//     'Upgrade Application to Angular'
-//   ]
-// };
 
-
-
-
-/**
- * Checklist database, it can build a tree structured Json object.
- * Each node in Json object represents a to-do item or a category.
- * If a node is a category, it has children items and new items can be added under the category.
- */
 @Injectable()
 export class ChecklistDatabase {
-  dataChange = new BehaviorSubject<TodoItemNode[]>([]);
+  dataChange = new BehaviorSubject<ServiceItemNode[]>([]);
 
-  get data(): TodoItemNode[] { return this.dataChange.value; }
+  get data(): ServiceItemNode[] { return this.dataChange.value; }
 
   constructor(private services:ServicesService) {
     this.initialize();
   }
 
   initialize() {
-    this.services.getServices().subscribe( x => {
- 
-      let y = JSON.parse(JSON.stringify(x));
-
-       for( let i = 0; i< y.length; i++)
-       {
-         let k = y[i];
-        
-          if(TREE_DATA[k.category.categoryName] == undefined)
-          {
-            TREE_DATA[k.category.categoryName]  = [k.serviceDescription];
-
-          } else
-          {
-            TREE_DATA[k.category.categoryName][k.serviceDescription]  = null;
-          } 
-      
-       }
+    
+      TREE_DATA = JSON.parse(localStorage.getItem("service_tree"));
 
       //  console.log(TREE_DATA);
        const data = this.buildFileTree(TREE_DATA, 0);
 
     // Notify the change.
     this.dataChange.next(data);
-      //console.log(x);
-    });
-    // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
+  
+    // Build the tree nodes from Json object. The result is a list of `ServiceItemNode` with nested
     //     file node as children.
    
   }
 
   /**
    * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
-   * The return value is the list of `TodoItemNode`.
+   * The return value is the list of `ServiceItemNode`.
    */
-  buildFileTree(obj: object, level: number): TodoItemNode[] {
-    return Object.keys(obj).reduce<TodoItemNode[]>((accumulator, key) => {
-      const value = obj[key];
-      const node = new TodoItemNode();
-      node.item = key;
+  buildFileTree(obj: object, level: number): ServiceItemNode[] {
+    return Object.entries(obj).reduce<ServiceItemNode[]>((accumulator, en) => {
+      const value = en[1];
+     
+      const node = new ServiceItemNode();
+      node.item = en[0];
 
-      if (value != null && value != 0) {
+
+      if (value != null && value != 0 ) {
         if (typeof value === 'object') {
           node.children = this.buildFileTree(value, level + 1);
         } else {
-          node.item = value;
+          node.item = en[1];
+          node.value = en[0];
         }
       }
 
@@ -121,15 +95,15 @@ export class ChecklistDatabase {
     }, []);
   }
 
-  /** Add an item to to-do list */
-  insertItem(parent: TodoItemNode, name: string) {
+  
+  insertItem(parent: ServiceItemNode, name: string) {
     if (parent.children) {
-      parent.children.push({item: name} as TodoItemNode);
+      parent.children.push({item: name} as ServiceItemNode);
       this.dataChange.next(this.data);
     }
   }
 
-  updateItem(node: TodoItemNode, name: string) {
+  updateItem(node: ServiceItemNode, name: string) {
     node.item = name;
     this.dataChange.next(this.data);
   }
@@ -154,11 +128,16 @@ export interface DialogData {
 })
 export class ServicesComponent implements OnInit {
 
+  private categories = {};
+  private categoryArray:Category[] = new Array();
+  panelOpenState = true;
+
+
   ngOnInit(): void {
   //  throw new Error("Method not implemented.");
   this.user_ref  = localStorage.getItem("user-reference");
   this.user = JSON.parse(localStorage.getItem("user_details"));
-  console.log(TREE_DATA);
+  
 //  this.user
   }
 
@@ -167,21 +146,68 @@ export class ServicesComponent implements OnInit {
   user_ref:string;
   user;
 
-  constructor(public dialog: MatDialog, private services: ServicesService) {
+  constructor(public dialog: MatDialog,private state: StateService, private services: ServicesService) {
     
+    // services.getServiceCategories().subscribe( c =>{
+    //      this.categories = c;
+    //      console.log(c);
+    // });
     
    }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(EditServiceComponent, {
-      width: '400px',
+      //width: '600px',
      
       data: { name: this.name, animal: this.animal }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      console.log(result);
+      let data = JSON.parse(localStorage.getItem("all_services"));
+      
+      result._selection.forEach(element => {
+        let serv = data.filter( v => {
+          if(v.serviceId == element.value)
+          {
+            console.log( element.value);
+            console.log(v.serviceId );
+          }
+        
+         return (v.serviceId == element.value)
+
+        } )[0];
+
+        console.log( serv);
+        let found:boolean = false;
+        this.categoryArray.forEach(c => {
+             if(c.name == serv.category.categoryName){
+              let service = new IndividualService();
+              service.name = serv.serviceDescription;
+              service.id = serv.serviceId;
+              c.services.push(service);
+              found = true;
+             }
+        });
+
+
+        if(!found)
+        {
+          let newCat = new Category();
+          newCat.name = serv.category.categoryName;
+          let service = new IndividualService();
+          service.name = serv.serviceDescription;
+          service.id = serv.serviceId;
+          newCat.services.push(service);
+          this.categoryArray.push(newCat);
+        }
+
+      });
+
+      console.log(this.categoryArray);
+      console.log(data);
+      
+      console.log(result._selection);
       this.animal = result;
     });
 
@@ -191,30 +217,31 @@ export class ServicesComponent implements OnInit {
 @Component({
   selector: 'edit-service',
   templateUrl: './edit-service-dialog.html',
+  styleUrls: ['./edit-service-dialog.css'],
   providers: [ChecklistDatabase],
 })
 
 export class EditServiceComponent {
 /** Map from flat node to nested node. This helps us finding the nested node to be modified */
-flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
+flatNodeMap = new Map<ServiceItemFlatNode, ServiceItemNode>();
 
 /** Map from nested node to flattened node. This helps us to keep the same object for selection */
-nestedNodeMap = new Map<TodoItemNode, TodoItemFlatNode>();
+nestedNodeMap = new Map<ServiceItemNode, ServiceItemFlatNode>();
 
 /** A selected parent node to be inserted */
-selectedParent: TodoItemFlatNode | null = null;
+selectedParent: ServiceItemFlatNode | null = null;
 
 /** The new item's name */
 newItemName = '';
 
-treeControl: FlatTreeControl<TodoItemFlatNode>;
+treeControl: FlatTreeControl<ServiceItemFlatNode>;
 
-treeFlattener: MatTreeFlattener<TodoItemNode, TodoItemFlatNode>;
+treeFlattener: MatTreeFlattener<ServiceItemNode, ServiceItemFlatNode>;
 
-dataSource: MatTreeFlatDataSource<TodoItemNode, TodoItemFlatNode>;
+dataSource: MatTreeFlatDataSource<ServiceItemNode, ServiceItemFlatNode>;
 
 /** The selection for checklist */
-checklistSelection = new SelectionModel<TodoItemFlatNode>(true /* multiple */);
+checklistSelection = new SelectionModel<ServiceItemFlatNode>(true /* multiple */);
 // constructor(
 //   public dialogRef: MatDialogRef<EditServiceComponent>,
 //   @Inject(MAT_DIALOG_DATA) public data: DialogData)
@@ -225,7 +252,7 @@ constructor( public dialogRef: MatDialogRef<EditServiceComponent>,
   @Inject(MAT_DIALOG_DATA) public data: DialogData, private database: ChecklistDatabase) {
   this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
     this.isExpandable, this.getChildren);
-  this.treeControl = new FlatTreeControl<TodoItemFlatNode>(this.getLevel, this.isExpandable);
+  this.treeControl = new FlatTreeControl<ServiceItemFlatNode>(this.getLevel, this.isExpandable);
   this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   database.dataChange.subscribe(data => {
@@ -233,25 +260,26 @@ constructor( public dialogRef: MatDialogRef<EditServiceComponent>,
   });
 }
 
-getLevel = (node: TodoItemFlatNode) => node.level;
+getLevel = (node: ServiceItemFlatNode) => node.level;
 
-isExpandable = (node: TodoItemFlatNode) => node.expandable;
+isExpandable = (node: ServiceItemFlatNode) => node.expandable;
 
-getChildren = (node: TodoItemNode): TodoItemNode[] => node.children;
+getChildren = (node: ServiceItemNode): ServiceItemNode[] => node.children;
 
-hasChild = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.expandable;
+hasChild = (_: number, _nodeData: ServiceItemFlatNode) => _nodeData.expandable;
 
-hasNoContent = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.item === '';
+hasNoContent = (_: number, _nodeData: ServiceItemFlatNode) => _nodeData.item === '';
 
 /**
  * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
  */
-transformer = (node: TodoItemNode, level: number) => {
+transformer = (node: ServiceItemNode, level: number) => {
   const existingNode = this.nestedNodeMap.get(node);
   const flatNode = existingNode && existingNode.item === node.item
       ? existingNode
-      : new TodoItemFlatNode();
+      : new ServiceItemFlatNode();
   flatNode.item = node.item;
+  flatNode.value = node.value;
   flatNode.level = level;
   flatNode.expandable = !!node.children;
   this.flatNodeMap.set(flatNode, node);
@@ -260,20 +288,20 @@ transformer = (node: TodoItemNode, level: number) => {
 }
 
 /** Whether all the descendants of the node are selected */
-descendantsAllSelected(node: TodoItemFlatNode): boolean {
+descendantsAllSelected(node: ServiceItemFlatNode): boolean {
   const descendants = this.treeControl.getDescendants(node);
   return descendants.every(child => this.checklistSelection.isSelected(child));
 }
 
 /** Whether part of the descendants are selected */
-descendantsPartiallySelected(node: TodoItemFlatNode): boolean {
+descendantsPartiallySelected(node: ServiceItemFlatNode): boolean {
   const descendants = this.treeControl.getDescendants(node);
   const result = descendants.some(child => this.checklistSelection.isSelected(child));
   return result && !this.descendantsAllSelected(node);
 }
 
 /** Toggle the to-do item selection. Select/deselect all the descendants node */
-todoItemSelectionToggle(node: TodoItemFlatNode): void {
+ServiceItemSelectionToggle(node: ServiceItemFlatNode): void {
   this.checklistSelection.toggle(node);
   const descendants = this.treeControl.getDescendants(node);
   this.checklistSelection.isSelected(node)
@@ -282,14 +310,14 @@ todoItemSelectionToggle(node: TodoItemFlatNode): void {
 }
 
 /** Select the category so we can insert the new item. */
-addNewItem(node: TodoItemFlatNode) {
+addNewItem(node: ServiceItemFlatNode) {
   const parentNode = this.flatNodeMap.get(node);
   this.database.insertItem(parentNode!, '');
   this.treeControl.expand(node);
 }
 
 /** Save the node to database */
-saveNode(node: TodoItemFlatNode, itemValue: string) {
+saveNode(node: ServiceItemFlatNode, itemValue: string) {
   const nestedNode = this.flatNodeMap.get(node);
   this.database.updateItem(nestedNode!, itemValue);
 }

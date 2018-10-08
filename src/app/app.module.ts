@@ -16,7 +16,7 @@ import { DprozContactUsComponent } from './dproz-contact-us/dproz-contact-us.com
 import { DprozAboutUsComponent } from './dproz-about-us/dproz-about-us.component';
 import { DocumentService } from './shared/services/document.service';
 import { ServicesComponent, EditServiceComponent } from './services/services.component';
-import { MatMenuModule, MatCardModule, MatTabsModule, MatStepperModule, MatListModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatTreeModule, MatIconModule, MatProgressBarModule, MatCheckboxModule, MatButtonModule, MatIconRegistry } from '@angular/material';
+import { MatMenuModule, MatCardModule, MatTabsModule, MatStepperModule, MatListModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatTreeModule, MatIconModule, MatProgressBarModule, MatCheckboxModule, MatButtonModule, MatIconRegistry, MatExpansionModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 import { BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -24,6 +24,10 @@ import { ServiceModule } from './service/service.module';
 import { BasicInfoComponent } from './services/basic-info/basic-info.component';
 import { DprozProfProfileComponent } from './dproz-prof-profile/dproz-prof-profile.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { DprozExperienceComponent } from './services/dproz-experience/dproz-experience.component';
+import { AngularFileUploaderModule } from "angular-file-uploader";
+import { MatFileUploadModule } from 'angular-material-fileupload';
+import { FileDropModule } from 'ngx-file-drop';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
@@ -34,7 +38,7 @@ export const httpInterceptorProviders = [
     HeaderComponent,
     DprozContactUsComponent,
     DprozAboutUsComponent,
-    ServicesComponent, EditServiceComponent, BasicInfoComponent, DprozProfProfileComponent,
+    ServicesComponent, EditServiceComponent, BasicInfoComponent, DprozProfProfileComponent, DprozExperienceComponent,
    
   ],
   imports: [
@@ -45,7 +49,8 @@ export const httpInterceptorProviders = [
     AppRoute, AngularFontAwesomeModule,
     DprozModule, FormsModule,ReactiveFormsModule, MatFormFieldModule, MatStepperModule,MatInputModule, MatTreeModule, MatIconModule,MatProgressBarModule,
     MatCardModule, MatTabsModule, BrowserAnimationsModule, MatListModule, MatDialogModule, 
-    ServiceModule, MatCheckboxModule, MatButtonModule, MatIconModule, MatMenuModule
+    ServiceModule, MatCheckboxModule, MatButtonModule, MatIconModule, MatMenuModule, MatExpansionModule, MatDatepickerModule, MatNativeDateModule,
+    MatCheckboxModule, AngularFileUploaderModule, MatFileUploadModule,FileDropModule
   ],
   entryComponents: [EditServiceComponent,],
   providers: [

@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { StateService } from '../../shared/services/state.service';
 import { Auth } from '../../shared/interfaces/auth';
+import { ServicesService } from '../../shared/services/services.service';
 
 @Component({
   selector: 'dproz-login',
@@ -17,8 +18,11 @@ export class LoginComponent implements OnInit {
   loginErrorResponse: Response;
   fpErrorResponse: Response;
   activeForm = 'loginForm';
+  private TREE_DATA = {};
 
-  constructor(private fb: FormBuilder, 
+
+  constructor(private services:ServicesService,
+              private fb: FormBuilder, 
               private router: Router, 
               private service: AuthenticationService,
               private state: StateService) { }
@@ -44,12 +48,42 @@ export class LoginComponent implements OnInit {
       window.localStorage.setItem('user-reference', userReferenceId);
       this.loginErrorResponse = null;
       this.state.next({loggedIn: true, authToken: Authorization, userReferenceId});
+
+
       this.service.getUser(this.state.getState().userReferenceId).subscribe(data => {
         console.log("user get data");
         console.log(data);
         localStorage.setItem("user_details", JSON.stringify(data));
         this.state.setIdentity(data);
         this.router.navigate(['../dproz/home']);
+      });
+
+      this.services.getServices().subscribe( x => {
+ 
+        console.log(x);
+        let y = JSON.parse(JSON.stringify(x));
+  
+         for( let i = 0; i< y.length; i++)
+         {
+           let k = y[i];
+          
+            if(this.TREE_DATA[k.category.categoryName] == undefined)
+            {
+              this.TREE_DATA[k.category.categoryName]  = {};
+            } 
+
+              this.TREE_DATA[k.category.categoryName][k.serviceId]  = k.serviceDescription;
+            
+        
+         }
+
+         localStorage.setItem("service_tree", JSON.stringify(this.TREE_DATA));
+         localStorage.setItem("all_services", JSON.stringify(x));
+
+
+         console.log(this.TREE_DATA);
+  
+      
       });
 
     }, (error) => {

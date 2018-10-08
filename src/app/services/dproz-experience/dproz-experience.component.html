@@ -1,0 +1,207 @@
+
+<div *ngIf="editForm">
+<form [formGroup]="experienceForm"><div class="form-container">
+  <!-- <mat-card class="example-card">
+    
+              <mat-card-content> -->
+                  <button *ngIf="false" mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+                      {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+                    </button>
+                    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+                      <mat-step [stepControl]="projectDetails">
+                        <div formGroupName="projectDetails" class="form-container">
+                          <ng-template matStepLabel>Fill out Project Details</ng-template>
+                          <mat-form-field >
+                              <mat-label>Project Name</mat-label>
+                              <input matInput formControlName="projectName" placeholder="Enter Project Name">
+                              <mat-error *ngIf="!experienceForm.controls['projectDetails'].controls['projectName'].valid">project name is required</mat-error>
+                              <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                              <mat-hint>project name</mat-hint>
+                            </mat-form-field>
+                          
+                      
+                            
+                         
+                            <mat-form-field >
+                              <mat-label>Start Date</mat-label>
+                              <input matInput formControlName="startDate" [matDatepicker]="startDate" placeholder="Choose start date">
+                              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                              <mat-datepicker #startDate></mat-datepicker>
+                              <mat-error *ngIf="!experienceForm.controls['projectDetails'].controls['startDate'].valid">start date is required</mat-error>
+                              <mat-hint>start date</mat-hint>
+                            </mat-form-field>
+                          
+                      
+                      
+                            <mat-form-field>
+                              <mat-label>End Date</mat-label>
+                              <input matInput formControlName="endDate" [matDatepicker]="endDate" placeholder="Choose end date">
+                              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                              <mat-datepicker #endDate></mat-datepicker>
+                              <mat-error *ngIf="!experienceForm.controls['projectDetails'].controls['endDate'].valid">end date is required</mat-error>
+                              <mat-hint>end date</mat-hint>
+                            </mat-form-field>
+                      
+                      
+                        
+                            <mat-form-field >
+                              <mat-label>Project Description</mat-label>
+                              <textarea matInput formControlName="projectDescription" placeholder="Enter Project Description"></textarea>
+                              <mat-error *ngIf="!experienceForm.controls['projectDetails'].controls['projectName'].valid">project description is required</mat-error>
+                              <mat-icon matSuffix>adjust</mat-icon>
+                              <mat-hint>project description</mat-hint>
+                            </mat-form-field>
+                          </div>
+                          <div style="float:right;">
+                              <button mat-button matStepperNext>Next</button>
+                            </div>
+                      </mat-step>
+                      <mat-step [stepControl]="clientDetails">
+                        <div formGroupName="clientDetails" class="form-container">
+                          <ng-template matStepLabel>Fill out Cleint Details</ng-template>
+                         
+                          <mat-form-field >
+                              <mat-label>Client Name</mat-label>
+                              <input matInput formControlName="customerNames" placeholder="Enter Client Name">
+                              <mat-error *ngIf="!experienceForm.controls['clientDetails'].controls['customerNames'].valid">client name is required</mat-error>
+                              <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                              <mat-hint>Client name</mat-hint>
+                            </mat-form-field>
+                          
+                            <mat-form-field >
+                                <mat-label>Phone Number</mat-label>
+                                <input matInput formControlName="customerNames" placeholder="Enter Phone Number">
+                                <mat-error *ngIf="!experienceForm.controls['clientDetails'].controls['customerNames'].valid">phone number is required</mat-error>
+                                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                                <mat-hint>phone number</mat-hint>
+                              </mat-form-field>
+                      
+                              <mat-form-field >
+                                  <mat-label>Email Address</mat-label>
+                                  <input matInput formControlName="customerNames" placeholder="Enter Email Address">
+                                  <mat-error *ngIf="!experienceForm.controls['clientDetails'].controls['emailAddress'].valid">email address is required</mat-error>
+                                  <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                                  <mat-hint>email address</mat-hint>
+                                </mat-form-field>
+                      
+                                <mat-checkbox formControlName="allowContact">Allow customer to contact client</mat-checkbox>
+                        
+                          
+                       
+                       
+                        </div>
+                         
+                        <div style="float:right;">
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                          </div>
+                      </mat-step>
+                      <mat-step>
+                        <ng-template matStepLabel>Upload Photos</ng-template>
+                        <div style="width:100%; clear:both;">
+                          <div style="float:left; width:100%">
+                        
+                            <input 
+                            style="display: none"  capture="camera"
+                            type="file" #image accept="image/*"  (change)="onFileChanged($event)">
+                          <button mat-button (click)="image.click()">Select File</button>
+                          
+                          <!-- <button mat-button (click)="onUpload()">Upload!</button>  -->
+                         </div>
+
+                          <div *ngFor="let item of urls; let i=index" style="float:left; width:250px; padding: 10px;">
+                              <div style=" overflow-wrap: break-word;">
+
+                                  <mat-form-field style="width:240px;" >
+                                      <input matInput type="text" id={{item.caption}} placeholder="Enter Caption">
+                                      <button mat-button *ngIf="item.caption" matSuffix mat-icon-button aria-label="Clear" (click)="item.caption=''">
+                                        <mat-icon>close</mat-icon>
+                                      </button>
+                                    </mat-form-field>
+
+                                  <!-- <textarea matInput placeholder="Leave a comment"></textarea> -->
+
+                              </div>
+                              <div style="float:right; margin: 10px 0px;"><button mat-icon-button (click)="removeImage(item)"> 
+                                <mat-icon>delete</mat-icon></button></div>
+                                <div style="margin: 20px 30px;">
+                                    <img width="90%" mat-card-image [src]=item.url alt="Photo of a Shiba Inu">
+                                    
+                                </div>
+                                
+                                <!-- <div style=" overflow-wrap: break-word; font-size: 10px;">
+                                    {{item.caption}}
+                                </div> -->
+                          </div>
+                          
+                          </div>
+
+                        
+                    
+                     
+                        <div style="float:right; clear:both">
+                          <button mat-button matStepperPrevious>Back</button>
+                          <button mat-button  (click)="stepper.reset()">Reset</button>
+                          <button mat-button (click)="saveForm()">Submit</button>
+                        </div>
+                      </mat-step>
+                    </mat-horizontal-stepper>
+                
+
+    
+   
+    
+  
+  <!-- </mat-card-content></mat-card> --></div>
+</form>
+</div>
+<div *ngIf="!editForm">
+    <div style="float:left; color: 	#50B2EC;">
+        Click the (+) Sign to Add Experience
+        </div>
+    <div style="float:right;">
+        <button mat-icon-button (click)="addExperience()">
+          <mat-icon>add</mat-icon></button>
+        </div>
+<div>
+<div>
+    <br>
+     <br>
+  <mat-card-subtitle style="font-size: 17px">Chakula</mat-card-subtitle>
+<mat-card-subtitle>Wali</mat-card-subtitle><div style="float:right; clear: both;"><button mat-icon-button (click)="editExperience()"> 
+<mat-icon>edit</mat-icon></button></div>
+   <p>
+      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+      bred for hunting.
+   </p>
+   <mat-card-subtitle>Ugali</mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="editExperience()"> <mat-icon>edit</mat-icon></button></div>
+    <p>
+       The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+       A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+       bred for hunting.
+    </p>
+ </div><hr/>
+
+  <div>
+  <mat-card-subtitle style="font-size: 17px">Biashara ya pili</mat-card-subtitle>
+  <mat-card-subtitle>
+      Mboga
+    </mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="editExperience()"> <mat-icon>edit</mat-icon></button></div>
+      <p>
+         The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+         A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+         bred for hunting.
+      </p>
+    </div><hr/>
+    <div>
+    <mat-card-subtitle style="font-size: 17px">biashara ya tatu</mat-card-subtitle>
+    <mat-card-subtitle>
+      Madawa
+    </mat-card-subtitle><div style="float:right"><button mat-icon-button (click)="editExperience()"> <mat-icon>edit</mat-icon></button></div>
+        <p>
+           The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+           A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+           bred for hunting.
+        </p>
+      </div><hr/></div></div>
