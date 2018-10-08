@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UploadEvent, UploadFile, FileSystemDirectoryEntry, FileSystemFileEntry } from 'ngx-file-drop';
 
@@ -7,6 +7,7 @@ export class MyFile
 {
     url:string;
     caption:string;
+    file;
 }
 
 
@@ -20,27 +21,12 @@ export class DprozExperienceComponent implements OnInit {
   experienceForm : FormGroup;
   hide = true;
   editForm:boolean = false;
-  token = "mrisho";
-  afuConfig = {
-    multiple: true,
-    formatsAllowed: ".jpg,.png",
-    maxSize: "3",
-    uploadAPI:  {
-      url:"https://example-file-upload-api",
-      headers: {
-     "Content-Type" : "text/plain;charset=UTF-8",
-     "Authorization" : `Bearer ${this.token}`
-      }
-    },
-    theme: "dragAndDrop",
-    hideProgressBar: false,
-    hideResetBtn: true,
-    hideSelectBtn: false
-};
+  photos: FormArray;
+
+ 
 
 
-
-public files: UploadFile[] = [];
+public files = [];
 public urls:MyFile[] = [];
 
 
@@ -48,14 +34,11 @@ public urls:MyFile[] = [];
  
   removeImage(img)
   {
-    const i = this.urls.indexOf(img);
-    if(i != -1)
-    {
-      this.urls.splice(i, 1);
-      this.files.splice(i, 1);
-    }
-    console.log(img);
-    this.urls
+
+    this.photos = this.experienceForm.get('photos') as FormArray;
+      
+    this.photos.removeAt(img);
+
   }
   public fileOver(event){
     console.log(event);
@@ -81,14 +64,33 @@ public urls:MyFile[] = [];
         'emailAddress' : ['', Validators.required],
         'allowContact' : ['', Validators.required],
       }),
+      photos : this.fb.array([ this.createPhoto() ])
      
     });
 
-   
-
-    //console.log(this.experienceForm.value());
+    this.photos = this.experienceForm.get('photos') as FormArray;
+      
+    
+          this.photos.removeAt(0);
+      
 
   }
+
+    createPhoto(file = null, url = null, caption = null): FormGroup {
+      return this.fb.group({
+        file: file,
+        url: url,
+        caption: caption
+      });
+    }
+
+    addPhoto(file, url, caption): void {
+
+      this.photos = this.experienceForm.get('photos') as FormArray;
+   
+      
+      this.photos.push(this.createPhoto(file, url, caption));
+    }
 
   onFileChanged(event)
   {
@@ -96,6 +98,9 @@ public urls:MyFile[] = [];
     console.log(event.target.files[0].name);
 
     if (event.target.files && event.target.files[0]) {
+
+      this.files.push(event.target.files[0]);
+      let file = event.target.files[0];
       var reader = new FileReader();
       let caption = event.target.files[0].name;
       reader.readAsDataURL(event.target.files[0]); // read file as data url
@@ -105,7 +110,10 @@ public urls:MyFile[] = [];
         let u = new MyFile();
         u.url = url;
         u.caption = caption;
+        u.file = file;
         this.urls.push(u);
+
+        this.addPhoto(file, url, caption)
       }
     }
   

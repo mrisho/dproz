@@ -67,7 +67,7 @@
                               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
                               <mat-hint>Client name</mat-hint>
                             </mat-form-field>
-                          
+                         
                             <mat-form-field >
                                 <mat-label>Phone Number</mat-label>
                                 <input matInput formControlName="customerNames" placeholder="Enter Phone Number">
@@ -104,17 +104,21 @@
                             <input 
                             style="display: none"  capture="camera"
                             type="file" #image accept="image/*"  (change)="onFileChanged($event)">
-                          <button mat-button (click)="image.click()">Select File</button>
+                          <button mat-button (click)="image.click()">Add Photo( 3 advisable)</button>
                           
                           <!-- <button mat-button (click)="onUpload()">Upload!</button>  -->
                          </div>
+                         <div formArrayName="photos">
 
-                          <div *ngFor="let item of urls; let i=index" style="float:left; width:250px; padding: 10px;">
-                              <div style=" overflow-wrap: break-word;">
+                      
+                          <div *ngFor="let photo of experienceForm.get('photos').controls; let i=index" style="float:left; width:290px; padding: 10px;">
+                            <div [formGroupName]="i">  
+                            <div  style=" overflow-wrap: break-word;">
 
-                                  <mat-form-field style="width:240px;" >
-                                      <input matInput type="text" id={{item.caption}} placeholder="Enter Caption">
-                                      <button mat-button *ngIf="item.caption" matSuffix mat-icon-button aria-label="Clear" (click)="item.caption=''">
+                                  <mat-form-field style="width:270px;" >
+                                      <input matInput type="text"   formControlName="caption"  placeholder="Enter Caption">
+                                    
+                                      <button mat-button *ngIf=experienceForm.controls.photos.controls[i].controls.caption.value matSuffix mat-icon-button aria-label="Clear" (click)="experienceForm.controls['photos'].controls[i].controls['caption'].setValue('')">
                                         <mat-icon>close</mat-icon>
                                       </button>
                                     </mat-form-field>
@@ -122,17 +126,19 @@
                                   <!-- <textarea matInput placeholder="Leave a comment"></textarea> -->
 
                               </div>
-                              <div style="float:right; margin: 10px 0px;"><button mat-icon-button (click)="removeImage(item)"> 
+                              <div style="float:right; margin: 10px 0px;"><button mat-icon-button (click)="removeImage(i)"> 
                                 <mat-icon>delete</mat-icon></button></div>
                                 <div style="margin: 20px 30px;">
-                                    <img width="90%" mat-card-image [src]=item.url alt="Photo of a Shiba Inu">
+                                    <img width="90%" mat-card-image [src]= experienceForm.controls.photos.controls[i].controls.url.value alt="Photo of a Shiba Inu">
                                     
-                                </div>
+                                </div></div>
                                 
                                 <!-- <div style=" overflow-wrap: break-word; font-size: 10px;">
-                                    {{item.caption}}
+                                    {{experienceForm.controls['photos'].controls[i].controls['caption'].value}}
+                                    {{experienceForm.controls['photos'].controls[i].controls['caption']}}
                                 </div> -->
                           </div>
+                        </div>
                           
                           </div>
 
