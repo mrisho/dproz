@@ -1,4 +1,12 @@
-export class serviceDetails {
+export interface PostingIfo
+{
+    getPostingData();
+  
+}
+
+export class serviceDetails implements PostingIfo {
+
+
 
     serviceId: string;
     serviceNumber: string;
@@ -7,22 +15,22 @@ export class serviceDetails {
     serviceDescription: string;
     languageIndicator: string;
 
-    getService(){
-
+    getPostingData() {
         return {
 
-        serviceId: this.serviceId,
-        serviceNumber: this.serviceNumber,
-        serviceSubcategory: this.serviceSubcategory,
-        serviceCategory: this.serviceCategory,
-        serviceDescription: this.serviceDescription,
-        languageIndicator: this.languageIndicator
-
-        }
+            serviceId: this.serviceId,
+            serviceNumber: this.serviceNumber,
+            serviceSubcategory: this.serviceSubcategory,
+            serviceCategory: this.serviceCategory,
+            serviceDescription: this.serviceDescription,
+            languageIndicator: this.languageIndicator
+    
+            }
     }
+
 }
 
-export class Attachment
+export class Attachment implements PostingIfo
 {
 
     referenceId: string;
@@ -34,7 +42,7 @@ export class Attachment
     description: string;
     createdDate: string;
 
-    getAttachment(){
+    getPostingData(){
 
         return {
         referenceId: this.referenceId,
@@ -50,7 +58,7 @@ export class Attachment
 }
 
 
-export class StandardLocation
+export class StandardLocation implements PostingIfo
 {
     longitude: number;
     latitude: number;
@@ -61,7 +69,7 @@ export class StandardLocation
     region: string;
     country: string;
 
-    getLocation(){
+    getPostingData(){
 
         return {
 
@@ -77,11 +85,11 @@ export class StandardLocation
     }
 }
 
-export class UrlClass
+export class UrlClass implements PostingIfo
 {
     url: string;
      
-    getUrl(){
+    getPostingData(){
 
         return {
 

@@ -218,7 +218,8 @@ export class DprozExperienceComponent implements OnInit {
     project.consent = <Consent>{ text: "", acknowledged: true, signedOn: "" };
     project.offeredServices = [];
     project.services = [];
-    project.attachments = attachments;
+    project.attachments = [];
+  //  project.attachments = attachments;
 
     return project;
   }
@@ -258,11 +259,11 @@ export class DprozExperienceComponent implements OnInit {
     else
     this.projects[this.index] = project;
 
-    console.log(project.getValue());
+    console.log(project.getPostingData());
 
     this
       .projectService
-      .postProject(project.getValue())
+      .postProject(project.getPostingData())
       .subscribe(x => {
 ////
         console.log(x);

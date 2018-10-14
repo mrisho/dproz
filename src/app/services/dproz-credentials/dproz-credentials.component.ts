@@ -181,8 +181,9 @@ export class DprozCredentialsComponent implements OnInit {
     console.log(credential);
 
     this.credentialService
-    .insertCredential(credential.getCredential())
+    .insertCredential(credential.getPostingData())
     .subscribe( x => {
+        
         console.log(x);
     });
 

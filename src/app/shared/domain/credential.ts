@@ -1,6 +1,6 @@
-import { Attachment } from './common_data';
+import { Attachment, PostingIfo } from './common_data';
 
-export class CredentialClass 
+export class CredentialClass implements PostingIfo
 {
    
     type: string;
@@ -13,7 +13,7 @@ export class CredentialClass
     attachment: Attachment;
 
     
-    getCredential():any{
+    getPostingData():any{
 
         return {
 
@@ -23,8 +23,8 @@ export class CredentialClass
                 issuedBy: this.issuedBy,
                 effectiveDate: this.effectiveDate,
                 expiringDate: this.expiringDate,
-                referenceId: this.referenceId,
-                attachment: this.attachment
+                referenceId: this.referenceId
+            
         }
     }
 }

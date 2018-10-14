@@ -1,7 +1,7 @@
-import { serviceDetails, Attachment, StandardLocation } from "./common_data";
+import { serviceDetails, Attachment, StandardLocation, PostingIfo } from "./common_data";
 
 
-export class Project 
+export class Project implements PostingIfo
 {
     projectName: string;
     projectDescription: string;
@@ -14,9 +14,10 @@ export class Project
     services: serviceDetails[];
     attachments: Attachment[];
 
-    getValue():any{
+    getPostingData():any{
 
         return {
+
             projectName: this.projectName,
             projectDescription: this.projectDescription,
             projectLocation: this.projectLocation,
@@ -25,24 +26,24 @@ export class Project
             client: this.client,
             consent: this.consent,
             offeredServices: this.offeredServices,
-            services: this.services,
-            attachements: this.attachments
+            services: this.services
         }
     }
 }
 
 
 
-export class ClientDetails
+export class ClientDetails implements PostingIfo
 {
     fistName: string;
     lastName: string;
     phoneNumber: string;
     emailAddress: string;
 
-    getClient(){
+    getPostingData(){
 
         return {
+
             fistName: this.fistName,
             lastName: this.lastName,
             phoneNumber: this.phoneNumber,
@@ -51,12 +52,13 @@ export class ClientDetails
     }
 }
 
-export class Consent{
+export class Consent implements PostingIfo
+{ 
     text: string;
     acknowledged: boolean = true;
     signedOn: string;
 
-    getConsent()
+    getPostingData()
     {
         return {
             text: this.text,
