@@ -4,6 +4,7 @@ import { ProjectsService } from './../../shared/services/projects.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { StandardLocation } from '../../shared/domain/common_data';
+import { PageEvent } from '@angular/material';
 
 
 
@@ -71,7 +72,20 @@ export class DprozExperienceComponent implements OnInit {
     console.log(event);
   }
 
+  length = 100;
+  pageSize = 10;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
 
+  // MatPaginator Output
+  pageEvent: PageEvent;
+
+  pageChange(event){
+    console.log(event);
+  }
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+  }
   constructor(private fb: FormBuilder, private projectService: ProjectsService) {
 
     this.setNewForm();
@@ -250,7 +264,7 @@ export class DprozExperienceComponent implements OnInit {
       .projectService
       .postProject(project.getValue())
       .subscribe(x => {
-
+////
         console.log(x);
       });
 

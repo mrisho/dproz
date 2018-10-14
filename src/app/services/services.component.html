@@ -46,7 +46,7 @@
       </mat-expansion-panel-header><ul style="list-style-type:square">
       <div *ngFor="let service of category.services" style="clear:both; padding: 0px 0px 10px;">
         <li>
-          <div style="float:left;">{{service.name}}</div><div style="float:right;"><button mat-icon-button (click)="openDialog()"> 
+          <div style="float:left;">{{service.name}}</div><div style="float:right;"><button mat-icon-button (click)="deleteService(service)"> 
             <mat-icon>delete</mat-icon></button></div></li>
       </div></ul>
       </mat-expansion-panel>

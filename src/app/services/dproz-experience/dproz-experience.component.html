@@ -185,4 +185,13 @@
      
  </div>
 
-</div></div>
+</div>
+<div style="clear:both; width:100%">
+  <mat-paginator [length]="length"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="pageChange($event)">
+</mat-paginator>
+</div>
+
+</div>

@@ -1,5 +1,8 @@
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { Attachment, UrlClass } from '../../shared/domain/common_data';
+import { CredentialClass } from '../../shared/domain/credential';
+import { CredentialsService } from '../../shared/services/credentials.service';
 
 
 export class Credential 
@@ -18,21 +21,23 @@ export class DprozCredentialsComponent implements OnInit {
   editForm:boolean = false;
   credentialForm: FormGroup;
   credentials: Credential[];
+  credentialData: CredentialClass[] = [];
+  hasAttachment:boolean = false;
 
   attachments: FormArray;
-  constructor(private fb: FormBuilder) { 
+  constructor(private fb: FormBuilder, private credentialService: CredentialsService) { 
     this.credentials = [
       {
-        Id : "90", Name : "Bachelor Degree",
+        Id : "CERTIFICATE_CREDENTIAL", Name : "Certificates",
       },
       {
-        Id : "91", Name : "Masters",
+        Id : "DIPLOMA_CREDENTIAL", Name : "Diploma",
       },
       {
-        Id : "92", Name : "PhD Holder",
+        Id : "BACHELOR_CREDENTIAL", Name : "Bachelor",
       },
       {
-        Id : "93", Name : "Professor",
+        Id : "MASTERS_CREDENTIAL", Name : "Masters",
       },
 
     ];
@@ -76,6 +81,7 @@ export class DprozCredentialsComponent implements OnInit {
     this.attachments = this.credentialForm.get('attachments') as FormArray;
 
     this.attachments.removeAt(img);
+    this.hasAttachment = false;
 
   }
 
@@ -85,6 +91,7 @@ export class DprozCredentialsComponent implements OnInit {
 
 
     this.attachments.push(this.createAttachment(file, url, caption));
+    this.hasAttachment = true;
   }
 
   onFileChanged(event) {
@@ -102,7 +109,8 @@ export class DprozCredentialsComponent implements OnInit {
       reader.onload = (event: any) => {
         let url = event.target.result;
 
-        this.addPhoto(file, url, caption)
+        this.addPhoto(file, url, caption);
+       
       }
     }
 
@@ -112,8 +120,72 @@ export class DprozCredentialsComponent implements OnInit {
     this.editForm = true;
   }
 
+  getAttachments(): Attachment[] {
+
+    let attachments: Attachment[] = [];
+
+    this.attachments = this.credentialForm.get('attachments') as FormArray;
+
+    for (let i = 0; i < this.attachments.controls.length; i++) {
+
+      let attachmentForm = this.attachments.controls[i] as FormGroup;
+      let file = attachmentForm.controls["file"].value;
+      let url = attachmentForm.controls["url"].value;
+      let caption = attachmentForm.controls["caption"].value;
+
+      let attachment: Attachment = <Attachment>{
+        referenceId: "",
+        parentReferenceId: "",
+        category: "CREDENTIAL",
+        url: <UrlClass>{ url: url },
+        thumbnail: true,
+        userReferenceId: "",
+        description: caption,
+        createdDate: (new Date()).toDateString()
+      };
+
+
+      attachments.push(attachment);
+
+    }
+    return attachments;
+  }
+
+  getCurrentCredential(attachment: Attachment):CredentialClass
+  {
+
+
+    let credential = new CredentialClass();
+
+    credential.type = this.credentialForm.get("credentialType").value;
+    credential.description = this.credentialForm.get("credentialDescription").value;
+    credential.identificationNumber = this.credentialForm.get("CredentialId").value;
+    credential.referenceId = "";
+    credential.issuedBy = this.credentialForm.get("authorityName").value;
+    credential.effectiveDate = this.credentialForm.get("startDate").value;
+    credential.expiringDate = this.credentialForm.get("endDate").value;
+    
+    credential.attachment = attachment;
+
+    return credential;
+  }
+
   saveForm() {
-    console.log(this.credentialForm.value);
+    
+    let attachment:Attachment = this.getAttachments()[0];
+
+    let credential:CredentialClass = this.getCurrentCredential(attachment);
+    
+    this.credentialData.push(credential);
+
+    console.log(credential);
+
+    this.credentialService
+    .insertCredential(credential.getCredential())
+    .subscribe( x => {
+        console.log(x);
+    });
+
     this.editForm = false;
   }
 
@@ -123,24 +195,3 @@ export class DprozCredentialsComponent implements OnInit {
 
 
 }
-// {
-  //   "type": "CERTIFICATE_CREDENTIAL",
-  //   "description": "string",
-  //   "identificationNumber": "string",
-  //   "issuedBy": "string",
-  //   "effectiveDate": "string",
-  //   "expiringDate": "string",
-  //   "referenceId": "string",
-  //   "attachment": {
-  //     "referenceId": "string",
-  //     "parentReferenceId": "string",
-  //     "category": "PROJECT",
-  //     "url": {
-  //       "url": "string"
-  //     },
-  //     "thumbnail": true,
-  //     "userReferenceId": "string",
-  //     "description": "string",
-  //     "createdDate": "string"
-  //   }
-  // }

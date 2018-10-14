@@ -23,6 +23,7 @@ export class ServiceItemFlatNode {
 }
 
 
+
 export class Category {
   name: string;
   equals(name:string):boolean{
@@ -153,6 +154,13 @@ export class ServicesComponent implements OnInit {
     //      console.log(c);
     // });
     
+   }
+
+   deleteService(service){
+
+    if(confirm("Are you sure to delete service "+service.name)) {
+      console.log("deleted");
+    }
    }
 
   openDialog(): void {
