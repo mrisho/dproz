@@ -1,14 +1,33 @@
+import { Attachment, UrlClass } from './../../shared/domain/common_data';
+import { ClientDetails, Consent, Project } from './../../shared/domain/experience';
+import { ProjectsService } from './../../shared/services/projects.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { UploadEvent, UploadFile, FileSystemDirectoryEntry, FileSystemFileEntry } from 'ngx-file-drop';
+import { StandardLocation } from '../../shared/domain/common_data';
 
 
-export class MyFile
-{
-    url:string;
-    caption:string;
-    file;
+
+
+export interface FileReaderEventTarget extends EventTarget {
+  result: string;
 }
+
+export interface FileReaderEvent extends Event {
+  target: FileReaderEventTarget;
+  getMessage(): string;
+}
+
+
+
+
+
+export class MyFile {
+  url: string;
+  caption: string;
+  file;
+}
+
+
 
 
 @Component({
@@ -18,82 +37,90 @@ export class MyFile
 })
 export class DprozExperienceComponent implements OnInit {
 
-  experienceForm : FormGroup;
+  experienceForm: FormGroup;
   hide = true;
-  editForm:boolean = false;
+  editForm: boolean = false;
+  add: boolean = false;
+  edit: boolean = false;
+  index: number = 0;
   photos: FormArray;
-
- 
-
-
-public files = [];
-public urls:MyFile[] = [];
+  projects: Project[] = [];
 
 
 
- 
-  removeImage(img)
-  {
+
+
+  public files = [];
+  public urls: MyFile[] = [];
+
+
+
+
+  removeImage(img) {
 
     this.photos = this.experienceForm.get('photos') as FormArray;
-      
+
     this.photos.removeAt(img);
 
   }
-  public fileOver(event){
-    console.log(event);
-  }
- 
-  public fileLeave(event){
+  public fileOver(event) {
     console.log(event);
   }
 
-  
-  constructor(private fb: FormBuilder) { 
+  public fileLeave(event) {
+    console.log(event);
+  }
 
-    this.experienceForm = fb.group({
-      'projectDetails' : fb.group({
-        'projectName' : ['', Validators.required],
-        'projectDescription' : ['', Validators.required],
-        'startDate' : ['', Validators.required],
-        'endDate' : ['', Validators.required],
+
+  constructor(private fb: FormBuilder, private projectService: ProjectsService) {
+
+    this.setNewForm();
+
+  }
+
+  setNewForm()
+  {
+    this.experienceForm = this.fb.group({
+      'projectDetails': this.fb.group({
+        'projectName': ['', Validators.required],
+        'projectDescription': ['', Validators.required],
+        'startDate': ['', Validators.required],
+        'endDate': ['', Validators.required],
       }),
-      'clientDetails': fb.group({
-        'customerNames' : ['', Validators.required],
-        'phoneNumber' : ['', Validators.required],
-        'emailAddress' : ['', Validators.required],
-        'allowContact' : ['', Validators.required],
+      'clientDetails': this.fb.group({
+        'customerNames': ['', Validators.minLength(4)],
+        'phoneNumber': [''],
+        'emailAddress': ['', Validators.email],
+        'allowContact': [''],
       }),
-      photos : this.fb.array([ this.createPhoto() ])
-     
+      photos: this.fb.array([this.createPhoto()])
+
     });
 
     this.photos = this.experienceForm.get('photos') as FormArray;
-      
-    
-          this.photos.removeAt(0);
-      
+
+
+    this.photos.removeAt(0);
 
   }
 
-    createPhoto(file = null, url = null, caption = null): FormGroup {
-      return this.fb.group({
-        file: file,
-        url: url,
-        caption: caption
-      });
-    }
+  createPhoto(file = null, url = null, caption = null): FormGroup {
+    return this.fb.group({
+      file: file,
+      url: url,
+      caption: caption
+    });
+  }
 
-    addPhoto(file, url, caption): void {
+  addPhoto(file, url, caption): void {
 
-      this.photos = this.experienceForm.get('photos') as FormArray;
-   
-      
-      this.photos.push(this.createPhoto(file, url, caption));
-    }
+    this.photos = this.experienceForm.get('photos') as FormArray;
 
-  onFileChanged(event)
-  {
+
+    this.photos.push(this.createPhoto(file, url, caption));
+  }
+
+  onFileChanged(event) {
 
     console.log(event.target.files[0].name);
 
@@ -103,35 +130,149 @@ public urls:MyFile[] = [];
       let file = event.target.files[0];
       var reader = new FileReader();
       let caption = event.target.files[0].name;
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
+      reader.readAsDataURL(event.target.files[0]);
 
-      reader.onload = (event) => { // called once readAsDataURL is completed
+      reader.onload = (event: any) => {
         let url = event.target.result;
-        let u = new MyFile();
-        u.url = url;
-        u.caption = caption;
-        u.file = file;
-        this.urls.push(u);
 
         this.addPhoto(file, url, caption)
       }
     }
-  
+
   }
 
-  addExperience()
-  {
+  addExperience() {
+   
+    this.setNewForm();
+
     this.editForm = true;
+    this.edit = false;
+    this.add = true;
   }
 
-  saveForm()
+  getAttachments(): Attachment[] {
+
+    let attachments: Attachment[] = [];
+
+    this.photos = this.experienceForm.get('photos') as FormArray;
+
+    for (let i = 0; i < this.photos.controls.length; i++) {
+
+      let attachmentForm = this.photos.controls[i] as FormGroup;
+      let file = attachmentForm.controls["file"].value;
+      let url = attachmentForm.controls["url"].value;
+      let caption = attachmentForm.controls["caption"].value;
+
+      let attachment: Attachment = <Attachment>{
+        referenceId: "",
+        parentReferenceId: "",
+        category: "PROJECT",
+        url: <UrlClass>{ url: url },
+        thumbnail: true,
+        userReferenceId: "",
+        description: caption,
+        createdDate: (new Date()).toDateString()
+      };
+
+
+      attachments.push(attachment);
+
+    }
+    return attachments;
+  }
+
+  getCurrentProject(attachments: Attachment[]): Project {
+
+    let client: ClientDetails = <ClientDetails>{
+
+      fistName: this.experienceForm.get("clientDetails").get("customerNames").value,
+      lastName: this.experienceForm.get("clientDetails").get("customerNames").value,
+      phoneNumber: this.experienceForm.get("clientDetails").get("phoneNumber").value,
+      emailAddress: this.experienceForm.get("clientDetails").get("emailAddress").value,
+    };
+
+    let project = new Project();
+
+    project.projectName = this.experienceForm.get("projectDetails").get("projectName").value;
+    project.projectDescription = this.experienceForm.get("projectDetails").get("projectDescription").value;
+    project.projectLocation = <StandardLocation>{
+      longitude: 0, latitude: 0, street: "", county: "", zip: "", city: "", region: "", country: ""
+    };
+    project.startDate = this.experienceForm.get("projectDetails").get("startDate").value;
+    project.completedDate = this.experienceForm.get("projectDetails").get("endDate").value;
+    project.client = client;
+    project.consent = <Consent>{ text: "", acknowledged: true, signedOn: "" };
+    project.offeredServices = [];
+    project.services = [];
+    project.attachments = attachments;
+
+    return project;
+  }
+
+  setCurrentProject(project:Project)
   {
+    
+    this.setNewForm();
+
+    let projetDetails = this.experienceForm.get("projectDetails") as FormGroup;
+    
+    projetDetails.get("projectName").setValue(project.projectName);
+    projetDetails.get("projectDescription").setValue(project.projectDescription);
+    projetDetails.get("startDate").setValue(project.startDate);
+    projetDetails.get("endDate").setValue(project.completedDate);
+
+    let clientDetails = this.experienceForm.get("clientDetails") as FormGroup;
+
+    clientDetails.get("customerNames").setValue(project.client.fistName);
+    clientDetails.get("phoneNumber").setValue(project.client.phoneNumber);
+    clientDetails.get("emailAddress").setValue(project.client.emailAddress);
+
+
+    for(let i = 0; i < project.attachments.length; i++){
+      let attachement = project.attachments[i];
+      this.addPhoto( null, attachement.url.url, attachement.description);
+    }
+  }
+
+  saveForm() {
+
+    let attachments: Attachment[] = this.getAttachments();
+    let project:Project = this.getCurrentProject(attachments);
+    
+    if(this.add)
+    this.projects.push(project);
+    else
+    this.projects[this.index] = project;
+
+    console.log(project.getValue());
+
+    this
+      .projectService
+      .postProject(project.getValue())
+      .subscribe(x => {
+
+        console.log(x);
+      });
+
     this.editForm = false;
+    this.add = false;
+    this.edit = false;
   }
 
-  editExperience()
-  {
+  editExperience(project,index) {
+
+    this.setCurrentProject(project);
+    this.index = index;
     this.editForm = true;
+    this.edit = true;
+    this.add = false;
+  }
+
+  
+
+  deleteExperience(index) {
+
+    this.projects.splice(index,1);
   }
 
   ngOnInit() {

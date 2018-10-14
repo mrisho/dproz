@@ -34,19 +34,19 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
     this.signupForm = this.fb.group({
       userType: ['', Validators.required],
-      firstName: ['Var', [Validators.required, Validators.minLength(2)]],
-      lastName: ['Shar', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       middleName: '',
-      emailAddress: ['vsharma226@gmail.com', Validators.required],
-      password: ['Dproz@123', [Validators.required, Validators.minLength(8)]],
-      repeatPassword: ['Dproz@123', Validators.required],
+      emailAddress: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      repeatPassword: ['', Validators.required],
       // profilePictureUrl: null,
       lastChangedPasswordOn: null,
       verificationDate: null,
       verified: true,
       recaptcha: [null, Validators.required],
       phone: this.fb.group({
-        phoneNumber: '1111222211',
+        phoneNumber: '',
         primary: true,
         contactMethod: 'CALL'
       }),
