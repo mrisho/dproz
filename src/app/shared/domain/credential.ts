@@ -1,5 +1,12 @@
 import { Attachment, PostingIfo } from './common_data';
 
+
+export class CredentialType
+{
+      Id : string;
+      Name : string;
+}
+
 export class CredentialClass implements PostingIfo
 {
    

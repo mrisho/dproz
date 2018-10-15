@@ -23,7 +23,21 @@
       env: { DEBUG: undefined },
       version: []
     };  
+
+
+      function myFunction() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "col-md-14 topnav") {
+          x.className = "col-md-14 topnav responsive";
+      } else {
+          x.className = "col-md-14 topnav";
+      }
+  }
+
+
+
   </script>
+
 </head>
 <body>
   

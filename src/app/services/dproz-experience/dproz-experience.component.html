@@ -180,6 +180,8 @@
       <div style="margin: 20px 30px; "><p>
           <img  style="max-height:200px; height: auto; width:auto; max-width: 270px;" mat-card-image [src]= project.attachments[0].url.url alt=project.attachments[0].url.url> 
           </p><p style="font-weight:bold">{{project.projectName}}</p>
+          <p>({{project.startDate | date}} - {{project.completedDate | date}})</p>
+          
           <p style="color:gray">{{project.projectDescription}}</p>
       </div>
      

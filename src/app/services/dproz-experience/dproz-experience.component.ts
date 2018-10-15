@@ -164,6 +164,7 @@ export class DprozExperienceComponent implements OnInit {
     this.add = true;
   }
 
+  //get attachments from the form to attachment data structure for submission
   getAttachments(): Attachment[] {
 
     let attachments: Attachment[] = [];
@@ -195,6 +196,7 @@ export class DprozExperienceComponent implements OnInit {
     return attachments;
   }
 
+   //get project data from the form to project data structure for submission
   getCurrentProject(attachments: Attachment[]): Project {
 
     let client: ClientDetails = <ClientDetails>{
@@ -219,11 +221,12 @@ export class DprozExperienceComponent implements OnInit {
     project.offeredServices = [];
     project.services = [];
     project.attachments = [];
-  //  project.attachments = attachments;
+    project.attachments = attachments;
 
     return project;
   }
 
+  //mostly used when editing, load data into the form
   setCurrentProject(project:Project)
   {
     

@@ -1,15 +1,11 @@
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Attachment, UrlClass } from '../../shared/domain/common_data';
-import { CredentialClass } from '../../shared/domain/credential';
+import { CredentialClass, CredentialType } from '../../shared/domain/credential';
 import { CredentialsService } from '../../shared/services/credentials.service';
 
 
-export class Credential 
-{
-      Id : string;
-      Name : string;
-}
+
 
 @Component({
   selector: 'dproz-credentials',
@@ -20,27 +16,14 @@ export class DprozCredentialsComponent implements OnInit {
 
   editForm:boolean = false;
   credentialForm: FormGroup;
-  credentials: Credential[];
+  credentials: CredentialType[];
   credentialData: CredentialClass[] = [];
   hasAttachment:boolean = false;
 
   attachments: FormArray;
   constructor(private fb: FormBuilder, private credentialService: CredentialsService) { 
-    this.credentials = [
-      {
-        Id : "CERTIFICATE_CREDENTIAL", Name : "Certificates",
-      },
-      {
-        Id : "DIPLOMA_CREDENTIAL", Name : "Diploma",
-      },
-      {
-        Id : "BACHELOR_CREDENTIAL", Name : "Bachelor",
-      },
-      {
-        Id : "MASTERS_CREDENTIAL", Name : "Masters",
-      },
 
-    ];
+    this.credentials = credentialService.getCredentiaTypes();
 
     this.credentialForm = fb.group({
      

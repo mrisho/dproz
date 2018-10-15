@@ -1,67 +1,47 @@
-<!-- <nav class="navbar navbar-expand-lg  fixed-top bg-white ">
-    <div class="container">
-       <a class="navbar-brand" href="#">
-        <img src="./../../../../assets/images/top_logo.png" class="img-fluid logo_style">
-        
-       </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault2" aria-controls="navbarsExampleDefault2" aria-expanded="true" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon navbar_style" ><i class="fa fa-reorder "></i></span>
-        </button>
-             
-        <div class="collapse navbar-collapse show" id="navbarsExampleDefault2">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" id="tab1" href="index.php">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">                              
-              <a class="nav-link" id="tab2" href="about-us.php"> About us</a>
-            </li>
-        
-             <li class="nav-item">
-              <a class="nav-link" id="tab3" href="#">Services </a>
-            </li>
-             <li class="nav-item">
-              <a class="nav-link" id="tab4" href="#"> Blog</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="tab5" href="contact-us.php"> Contact us</a>
-            </li>
-          </ul>
-          <a *ngIf="!userData.loggedIn" class="btn btn-primary" routerLink="dproz/login">Login</a>
-          <a *ngIf="!userData.loggedIn" class="btn btn-primary" routerLink="dproz/signup" style="background: black; margin-left:10px; color:#fff">Signup</a>
-          <div class="row dropdown" *ngIf="userData.loggedIn">
-              <div class="col">
-                <div ngbDropdown class="d-inline-block">
-                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Options</button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button class="dropdown-item" routerLink="dproz/profile">Profile</button>
-                    <button class="dropdown-item"  (click)="logout()">Logout</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
-    </div>
-  </nav> -->
 
-  <!-- container -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- <div class="topnav" id="myTopnav">
+  <a href="#home" class="active">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="#about">About</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div> -->
+
 
 
 <div class="dproz-header">
-  <div class="row">
+  <div class="row"> 
 
-    <div class="col-md-10 dproz-logo" >
-      <img routerLink="dproz/home" src="../../../../assets/images/Vector Smart Object.png" alt="logo dproz">
+    <div  class="col-md-10 dproz-logo" >
+      <img id="outer-img" routerLink="dproz/home" src="../../../../assets/images/Vector Smart Object.png" alt="logo dproz">
     </div>
-    <div class="col-md-14 navigation">
+    <div id="myTopnav" class="col-md-14 topnav">
+      <img id="inner-img"  routerLink="dproz/home"  src="../../../../assets/images/Vector Smart Object.png" alt="logo dproz">
       <a routerLink="dproz/home" routerLinkActive="active-link">Home</a>
       <a routerLink="dproz/about-us" routerLinkActive="active-link">About Us</a>
       <a routerLink="dproz/services" routerLinkActive="active-link">Services</a>
       <a routerLink="dproz/blog" routerLinkActive="active-link">Blog</a>
       <a routerLink="dproz/contact-us" routerLinkActive="active-link">Contact Us</a>
       <a *ngIf="!userData.loggedIn" class="btn btn-primary" routerLink="dproz/login">Login</a>
-      <a *ngIf="!userData.loggedIn" class="btn btn-primary" routerLink="dproz/signup" style="background: black; margin-left:10px; color:#fff">Signup</a>
-      <div class="row dropdown" *ngIf="userData.loggedIn">
+      <a *ngIf="!userData.loggedIn" class="btn btn-primary" routerLink="dproz/signup" style="background: black;  color:#fff">Signup</a>
+      <div *ngIf="userData.loggedIn" class="dropdown">
+          <button class="dropbtn">Options 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a routerLink="dproz/profile">Profile</a>
+            <a (click)="logout()" class="button">Logout</a>
+          </div>
+        </div> 
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+      <!-- <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a> -->
+      <div class="row dropdown" *ngIf="false">
           <div class="col">
             <div ngbDropdown class="d-inline-block">
               <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Options</button>
