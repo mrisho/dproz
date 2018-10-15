@@ -1,4 +1,5 @@
-import { serviceDetails, Attachment, StandardLocation, PostingIfo } from "./common_data";
+import { serviceDetails, Attachment, StandardLocation } from "./common_data";
+import { PostingIfo } from "../interfaces/domainData";
 
 
 export class Project implements PostingIfo

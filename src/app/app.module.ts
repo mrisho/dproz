@@ -30,12 +30,17 @@ import { MatFileUploadModule } from 'angular-material-fileupload';
 import { FileDropModule } from 'ngx-file-drop';
 import { DprozCredentialsComponent } from './services/dproz-credentials/dproz-credentials.component';
 
+import { ResponsiveMenuDirective } from './shared/directives/responsive-menu.directive';
+import { CredentialTypePipe } from './shared/pipes/credential-type.pipe';
+
+import { from } from 'rxjs';
+
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
 ];
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent, ResponsiveMenuDirective,CredentialTypePipe,
     HeaderComponent,
     DprozContactUsComponent,
     DprozAboutUsComponent,

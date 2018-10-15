@@ -1,4 +1,5 @@
-import { Attachment, PostingIfo } from './common_data';
+import { Attachment } from './common_data';
+import { PostingIfo } from '../interfaces/domainData';
 
 
 export class CredentialType

@@ -1,8 +1,5 @@
-export interface PostingIfo
-{
-    getPostingData();
-  
-}
+import { PostingIfo } from "../interfaces/domainData";
+
 
 export class serviceDetails implements PostingIfo {
 
