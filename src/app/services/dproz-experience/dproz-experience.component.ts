@@ -8,19 +8,22 @@ import { PageEvent } from '@angular/material';
 import { debounce } from 'rxjs/operators';
 import { timer } from 'rxjs';
 
+
+//custom date validator for start date not after today
 function startDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
   if (control.value !== undefined && (isNaN(control.value) || control.value > new Date())) {
-      return { 'startDate': true };
+    return { 'startDate': true };
   }
   return null;
 }
 
+//custom date validator for end date not before start date
 function endDateValidator(startDate: Date): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
-      if (control.value !== undefined && (isNaN(control.value) || control.value <= startDate)) {
-          return { 'endDate': true };
-      }
-      return null;
+    if (control.value !== undefined && (isNaN(control.value) || control.value <= startDate)) {
+      return { 'endDate': true };
+    }
+    return null;
   };
 }
 
@@ -63,7 +66,7 @@ export class DprozExperienceComponent implements OnInit {
   index: number = 0;
   photos: FormArray;
   projects: Project[] = [];
-  startDateValue:Date = new Date();
+  startDateValue: Date = new Date();
 
 
 
@@ -97,7 +100,7 @@ export class DprozExperienceComponent implements OnInit {
   // MatPaginator Output
   pageEvent: PageEvent;
 
-  pageChange(event){
+  pageChange(event) {
     console.log(event);
   }
 
@@ -110,14 +113,13 @@ export class DprozExperienceComponent implements OnInit {
 
   }
 
-  setNewForm()
-  {
+  setNewForm() {
     this.experienceForm = this.fb.group({
       'projectDetails': this.fb.group({
         'projectName': ['', Validators.required],
         'projectDescription': ['', Validators.required],
-        'startDate': ['',  Validators.compose([Validators.required, startDateValidator])],
-        'endDate': ['', Validators.compose([Validators.required, endDateValidator(this.startDateValue)])],
+        'startDate': ['', Validators.compose([Validators.required, startDateValidator])],
+        'endDate': ['', Validators.compose([Validators.required])],
       }),
       'clientDetails': this.fb.group({
         'customerNames': ['', Validators.compose([Validators.minLength(4), Validators.required])],
@@ -129,16 +131,20 @@ export class DprozExperienceComponent implements OnInit {
 
     });
 
-    this.photos = this.experienceForm.get('photos') as FormArray;
-     let date = this.experienceForm.get('projectDetails').get('startDate') as FormControl;
-     let k = date.valueChanges.pipe(debounce(() => timer(100))).subscribe( x => {
-      
-      this.startDateValue = date.value;     
+
+
+    //assign value to endDate everytime the startDate changes
+    let date = this.experienceForm.get('projectDetails').get('startDate') as FormControl;
+    date.valueChanges.pipe(debounce(() => timer(100))).subscribe(x => {
+      let u = this.experienceForm.get('projectDetails').get('endDate') as FormControl;
+      u.setValidators(endDateValidator(date.value));
+      let old = u.value;
+      u.setValue(old);
     });
 
-   
-    
 
+  
+    this.photos = this.experienceForm.get('photos') as FormArray;
     this.photos.removeAt(0);
 
   }
@@ -181,7 +187,7 @@ export class DprozExperienceComponent implements OnInit {
   }
 
   addExperience() {
-   
+
     this.setNewForm();
 
     this.editForm = true;
@@ -221,7 +227,7 @@ export class DprozExperienceComponent implements OnInit {
     return attachments;
   }
 
-   //get project data from the form to project data structure for submission
+  //get project data from the form to project data structure for submission
   getCurrentProject(attachments: Attachment[]): Project {
 
     let client: ClientDetails = <ClientDetails>{
@@ -252,13 +258,12 @@ export class DprozExperienceComponent implements OnInit {
   }
 
   //mostly used when editing, load data into the form
-  setCurrentProject(project:Project)
-  {
-    
+  setCurrentProject(project: Project) {
+
     this.setNewForm();
 
     let projetDetails = this.experienceForm.get("projectDetails") as FormGroup;
-    
+
     projetDetails.get("projectName").setValue(project.projectName);
     projetDetails.get("projectDescription").setValue(project.projectDescription);
     projetDetails.get("startDate").setValue(project.startDate);
@@ -271,21 +276,21 @@ export class DprozExperienceComponent implements OnInit {
     clientDetails.get("emailAddress").setValue(project.client.emailAddress);
 
 
-    for(let i = 0; i < project.attachments.length; i++){
+    for (let i = 0; i < project.attachments.length; i++) {
       let attachement = project.attachments[i];
-      this.addPhoto( null, attachement.url.url, attachement.description);
+      this.addPhoto(null, attachement.url.url, attachement.description);
     }
   }
 
   saveForm() {
 
     let attachments: Attachment[] = this.getAttachments();
-    let project:Project = this.getCurrentProject(attachments);
-    
-    if(this.add)
-    this.projects.push(project);
+    let project: Project = this.getCurrentProject(attachments);
+
+    if (this.add)
+      this.projects.push(project);
     else
-    this.projects[this.index] = project;
+      this.projects[this.index] = project;
 
     console.log(project.getPostingData());
 
@@ -293,7 +298,7 @@ export class DprozExperienceComponent implements OnInit {
       .projectService
       .postProject(project.getPostingData())
       .subscribe(x => {
-////
+        ////
         console.log(x);
       });
 
@@ -302,7 +307,7 @@ export class DprozExperienceComponent implements OnInit {
     this.edit = false;
   }
 
-  editExperience(project,index) {
+  editExperience(project, index) {
 
     this.setCurrentProject(project);
     this.index = index;
@@ -311,17 +316,17 @@ export class DprozExperienceComponent implements OnInit {
     this.add = false;
   }
 
-  
+
 
   deleteExperience(index) {
 
-    this.projects.splice(index,1);
+    this.projects.splice(index, 1);
   }
 
   ngOnInit() {
   }
 
-  
+
 }
 
 
