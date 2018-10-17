@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { StateService } from '../../services/state.service';
 import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
@@ -12,9 +12,29 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  userData;
+  @ViewChild('myTopnav') topnav:ElementRef;
 
-  constructor(private state: StateService, private router: Router) { }
+  userData;
+  isMenuOpen:boolean;
+
+  changeMenu(status){
+    this.isMenuOpen = status;
+  }
+  ddClick(event:Event){
+
+    event.stopImmediatePropagation();
+  }
+
+  dcClick(event:Event){
+
+    let myTopnav: HTMLElement = document.getElementById('myTopnav') as HTMLElement;
+    
+    myTopnav.click();
+    
+  }
+
+
+  constructor(private state: StateService, private router: Router, private r:Renderer2) { }
 
   ngOnInit() {    
     this.state.user.subscribe(data => {

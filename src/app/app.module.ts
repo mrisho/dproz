@@ -16,7 +16,7 @@ import { DprozContactUsComponent } from './dproz-contact-us/dproz-contact-us.com
 import { DprozAboutUsComponent } from './dproz-about-us/dproz-about-us.component';
 import { DocumentService } from './shared/services/document.service';
 import { ServicesComponent, EditServiceComponent } from './services/services.component';
-import { MatMenuModule, MatCardModule, MatTabsModule, MatStepperModule, MatListModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatTreeModule, MatIconModule, MatProgressBarModule, MatCheckboxModule, MatButtonModule, MatIconRegistry, MatExpansionModule, MatDatepickerModule, MatNativeDateModule, MatOptionModule, MatSelectModule, MatPaginatorModule } from '@angular/material';
+import { MatMenuModule, MatCardModule, MatTabsModule, MatStepperModule, MatListModule, MatDialogModule, MatInputModule, MatFormFieldModule, MatTreeModule, MatIconModule, MatProgressBarModule, MatCheckboxModule, MatButtonModule, MatIconRegistry, MatExpansionModule, MatDatepickerModule, MatNativeDateModule, MatOptionModule, MatSelectModule, MatPaginatorModule, MatChipsModule } from '@angular/material';
 import { BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -52,11 +52,11 @@ export const httpInterceptorProviders = [
     HttpClientModule,
     NgbModule,
     // Routing  
-    AppRoute, AngularFontAwesomeModule, MatOptionModule, MatSelectModule, MatPaginatorModule,
+    AppRoute, AngularFontAwesomeModule, MatOptionModule, MatSelectModule, MatPaginatorModule, MatChipsModule,
     DprozModule, FormsModule,ReactiveFormsModule, MatFormFieldModule, MatStepperModule,MatInputModule, MatTreeModule, MatIconModule,MatProgressBarModule,
     MatCardModule, MatTabsModule, BrowserAnimationsModule, MatListModule, MatDialogModule, 
     ServiceModule, MatCheckboxModule, MatButtonModule, MatIconModule, MatMenuModule, MatExpansionModule, MatDatepickerModule, MatNativeDateModule,
-    MatCheckboxModule, AngularFileUploaderModule, MatFileUploadModule,FileDropModule
+    MatCheckboxModule, AngularFileUploaderModule,FileDropModule
   ],
   entryComponents: [EditServiceComponent,],
   providers: [

@@ -27,7 +27,7 @@
                               <input matInput formControlName="startDate" [matDatepicker]="startDate" placeholder="Choose start date">
                               <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                               <mat-datepicker #startDate></mat-datepicker>
-                              <mat-error *ngIf="!experienceForm.controls['projectDetails'].controls['startDate'].valid">start date is required</mat-error>
+                              <mat-error *ngIf="!experienceForm.controls['projectDetails'].controls['startDate'].valid">start date must be before today's date</mat-error>
                               <mat-hint>start date</mat-hint>
                             </mat-form-field>
                           
@@ -38,7 +38,7 @@
                               <input matInput formControlName="endDate" [matDatepicker]="endDate" placeholder="Choose end date">
                               <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                               <mat-datepicker #endDate></mat-datepicker>
-                              <mat-error *ngIf="!experienceForm.controls['projectDetails'].controls['endDate'].valid">end date is required</mat-error>
+                              <mat-error *ngIf="!experienceForm.controls['projectDetails'].controls['endDate'].valid">end date must be later than start date</mat-error>
                               <mat-hint>end date</mat-hint>
                             </mat-form-field>
                       

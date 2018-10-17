@@ -1,5 +1,4 @@
 import { ServicesService } from './../shared/services/services.service';
-import { StateService } from './../../../../../dproz-ui/src/app/shared/services/state.service';
 import { Inject, Component, OnInit, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -124,7 +123,7 @@ export interface DialogData {
   selector: 'dproz-services',
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
-  providers: [StateService]
+ // providers: [StateService]
  
 })
 export class ServicesComponent implements OnInit {
@@ -147,7 +146,7 @@ export class ServicesComponent implements OnInit {
   user_ref:string;
   user;
 
-  constructor(public dialog: MatDialog,private state: StateService, private services: ServicesService) {
+  constructor(public dialog: MatDialog, private services: ServicesService) {
     
     // services.getServiceCategories().subscribe( c =>{
     //      this.categories = c;

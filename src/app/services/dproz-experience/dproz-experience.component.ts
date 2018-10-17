@@ -1,11 +1,28 @@
 import { Attachment, UrlClass } from './../../shared/domain/common_data';
 import { ClientDetails, Consent, Project } from './../../shared/domain/experience';
 import { ProjectsService } from './../../shared/services/projects.service';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { StandardLocation } from '../../shared/domain/common_data';
 import { PageEvent } from '@angular/material';
+import { debounce } from 'rxjs/operators';
+import { timer } from 'rxjs';
 
+function startDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+  if (control.value !== undefined && (isNaN(control.value) || control.value > new Date())) {
+      return { 'startDate': true };
+  }
+  return null;
+}
+
+function endDateValidator(startDate: Date): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value !== undefined && (isNaN(control.value) || control.value <= startDate)) {
+          return { 'endDate': true };
+      }
+      return null;
+  };
+}
 
 
 
@@ -46,6 +63,7 @@ export class DprozExperienceComponent implements OnInit {
   index: number = 0;
   photos: FormArray;
   projects: Project[] = [];
+  startDateValue:Date = new Date();
 
 
 
@@ -98,11 +116,11 @@ export class DprozExperienceComponent implements OnInit {
       'projectDetails': this.fb.group({
         'projectName': ['', Validators.required],
         'projectDescription': ['', Validators.required],
-        'startDate': ['', Validators.required],
-        'endDate': ['', Validators.required],
+        'startDate': ['',  Validators.compose([Validators.required, startDateValidator])],
+        'endDate': ['', Validators.compose([Validators.required, endDateValidator(this.startDateValue)])],
       }),
       'clientDetails': this.fb.group({
-        'customerNames': ['', Validators.minLength(4)],
+        'customerNames': ['', Validators.compose([Validators.minLength(4), Validators.required])],
         'phoneNumber': [''],
         'emailAddress': ['', Validators.email],
         'allowContact': [''],
@@ -112,7 +130,14 @@ export class DprozExperienceComponent implements OnInit {
     });
 
     this.photos = this.experienceForm.get('photos') as FormArray;
+     let date = this.experienceForm.get('projectDetails').get('startDate') as FormControl;
+     let k = date.valueChanges.pipe(debounce(() => timer(100))).subscribe( x => {
+      
+      this.startDateValue = date.value;     
+    });
 
+   
+    
 
     this.photos.removeAt(0);
 
@@ -296,4 +321,8 @@ export class DprozExperienceComponent implements OnInit {
   ngOnInit() {
   }
 
+  
 }
+
+
+
