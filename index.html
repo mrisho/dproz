@@ -4,8 +4,24 @@
   <meta charset="utf-8">
   <title>Dproz</title>
  
+  <script>
+    sessionStorage.redirect = location.href;
+  </script>
+  <meta http-equiv="refresh" content="0;URL='https://mrisho.github.io/dproz'">
+
+  <script>
+    // See http://www.backalleycoder.com/2016/05/13/sghpa-the-single-page-app-hack-for-github-pages/
+    (function(){
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect != location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    })();
+  </script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <base href="https://github.com/mrisho/dproz/">
+  <base href="https://github.com/mrisho/dproz">
     <!-- Bootstrap core CSS -->
     <!-- <link href="./css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Custom styles for this template -->
