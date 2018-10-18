@@ -4,22 +4,7 @@
   <meta charset="utf-8">
   <title>Dproz</title>
  
-  <script>
-    sessionStorage.redirect = location.href;
-  </script>
-  <meta http-equiv="refresh" content="0;URL='https://mrisho.github.io/dproz/'">
-
-  <script>
-    // See http://www.backalleycoder.com/2016/05/13/sghpa-the-single-page-app-hack-for-github-pages/
-    (function(){
-      var redirect = sessionStorage.redirect;
-      delete sessionStorage.redirect;
-      if (redirect && redirect != location.href) {
-        history.replaceState(null, null, redirect);
-      }
-    })();
-  </script>
-
+  
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <base href="https://github.com/mrisho/dproz/">
     <!-- Bootstrap core CSS -->
@@ -31,7 +16,7 @@
     <!-- <link rel="stylesheet" type="text/css" href="./css/style.css"/> -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" type="image/x-icon" href="dproz/assets/images/favi.png">
+  <link rel="shortcut icon" type="image/x-icon" href="./assets/images/favi.png">
   <script>
     var global = global || window;
     var Buffer = Buffer || [];
@@ -58,5 +43,5 @@
 <body>
   
   <dproz-root></dproz-root>
-<!-- <script type="text/javascript" src="dproz/runtime.js"></script><script type="text/javascript" src="dproz/polyfills.js"></script><script type="text/javascript" src="dproz/styles.js"></script><script type="text/javascript" src="dproz/vendor.js"></script><script type="text/javascript" src="dproz/main.js"></script></body> -->
+<script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="polyfills.js"></script><script type="text/javascript" src="styles.js"></script><script type="text/javascript" src="vendor.js"></script><script type="text/javascript" src="main.js"></script></body>
 </html>
